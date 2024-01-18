@@ -6,10 +6,9 @@
 #    By: sebasnadu <johnavar@student.42berlin.de>   +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/17 20:42:24 by sebasnadu         #+#    #+#              #
-#    Updated: 2024/01/18 15:40:18 by sebasnadu        ###   ########.fr        #
+#    Updated: 2024/01/18 18:55:15 by sebasnadu        ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
-
 
 ################################################################################
 ##                                PHILOSOPHERS                                ##
@@ -18,6 +17,10 @@
 NAME				:= philo
 CC					:= cc
 RM 					:= rm -rf
+
+################################################################################
+##                                   COLORS                                   ##
+################################################################################
 
 DEFAULT				:= \033[0;39m
 GRAY 				:= \033[0;90m
@@ -41,33 +44,37 @@ vpath %.h $(INC_DIR)
 vpath %.c $(SRC_DIR)
 
 HEADERS				:= philo.h
-
-SOURCES				:= main.c
-
-OBJECTS				:= $(addprefix $(OBJ_DIR)/, $SOURCES:.c=.o)
+SOURCE				:= main.c
+OBJECTS				:= $(addprefix $(OBJ_DIR)/, $(SOURCE:.c=.o))
 
 ################################################################################
 ##                                   FLAGS                                    ##
 ################################################################################
 
 ifeq ($(DEBUG), 1)
-	CFLAGS			:= -Wall -Wextra -Werror -g -fsanitize=address,threads
+	CFLAGS			:= -Wall -Wextra -Werror -g -fsanitize=address
+else ifeq ($(DEBUG), 2)
+	CFLAGS			:= -Wall -Wextra -Werror -g -fsanitize=thread
 else
 	CFLAGS			:= -Wall -Wextra -Werror -g
 endif
-PFLAGS				:= -lrt -lpthread
-INCLUDES			:= -I $(INC_DIR)
+
+PFLAGS				:= -lpthread
+INCLUDES			:= -I$(INC_DIR)
 
 ################################################################################
 ##                                PROGRESS_BAR                                ##
 ################################################################################
 
-SRC_COUNT_TOT		:= $(shell expr $(shell echo -n $(SOURCES) | wc -w) - $(shell ls -l $(OBJ_DIR) 2>&1 | grep ".o" | wc -l))
-ifeq ($(shell test $(SRC_COUNT) -le 0; echo $$?), 0)
-	SRC_COUNT_TOT	:= $(shell echo -n $(SOURCES) | wc -W)
+SRC_WORD_COUNT		:= $(shell echo -n $(SOURCE) | wc -w)
+OBJ_FILE_COUNT		:= $(shell ls -l $(OBJ_DIR) 2>&1 | grep ".o" | wc -l)
+SRC_COUNT_TOT		:= $(shell expr $(SRC_WORD_COUNT) - $(OBJ_FILE_COUNT))
+
+ifeq ($(shell test $(SRC_COUNT_TOT) -le 0; echo $$?), 0)
+	SRC_COUNT_TOT	:= $(shell echo -n $(SOURCE) | wc -w)
 endif
 
-SRC_COUNT			:= 0
+SRC_COUNT			= 0
 SRC_PCT				= $(shell expr 100 \* $(SRC_COUNT) / $(SRC_COUNT_TOT))
 
 ################################################################################
@@ -78,25 +85,32 @@ all:			$(NAME)
 
 
 $(NAME):		$(OBJECTS)
-	@printf "$(YELLOW) Linking $(WHITE)$(NAME)$(YELLOW)...$(DEFAULT)\n"
-	@$(CC) $(PFLAGS) $^ -o $@
-	@$(PRINTF) "\r%100s\r$(GREEN)$(NAME): Compilation success 🎉!$(DEFAULT)\n"
+	@printf "$(MAGENTA)[$(NAME)] $(DEFAULT)Linking "
+	@printf "($(BLUE)$(NAME)$(DEFAULT))...\n"
+	@$(CC) $(CFLAGS) $(PFLAGS) $(INCLUDES) $^ -o $@
+	@printf "\r%100s\r$(MAGENTA)[$(NAME)] $(GREEN)Compilation success "
+	@printf "🎉!$(DEFAULT)\n"
 
-$(OBJ_DIR):
-	@printf "$(YELLOW)Creating objects directory: $(WHITE)$(OBJ_DIR)$(YELLOW)...$(DEFAULT)\n"
-	@mkdir -p $@
-
-$(OBJ_DIR)/%.o:	$(SRC_DIR)/%.c $(HEADERS) | $(OBJ_DIR)
+$(OBJ_DIR)/%.o: %.c $(HEADERS) | $(OBJ_DIR)
 	@$(eval SRC_COUNT = $(shell expr $(SRC_COUNT) + 1))
-	@printf "\r%100s\r[ %d/%d (%d%%) ] Compiling $(BLUE)$<$(DEFAULT)..." "" $(SRC_COUNT) $(SRC_COUNT_TOT) $(SRC_PCT) 
+	@printf "\r%100s\r$(MAGENTA)[$(NAME)] $(GREEN)[ %d/%d (%d%%) ]" \
+			"" $(SRC_COUNT) $(SRC_COUNT_TOT) $(SRC_PCT) 
+	@printf " $(DEFAULT)Compiling ($(BLUE)$<$(DEFAULT))...\n"
 	@$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
+$(OBJ_DIR):
+	@printf "$(MAGENTA)[$(NAME)] $(DEFAULT)Creating objects directory "
+	@printf "($(BLUE)$(OBJ_DIR)$(DEFAULT))...\n"
+	@mkdir -p $@
+
 clean:
-	@printf "$(RED)Cleaning up objects files in $(WHITE)$(OBJ_DIR)$(RED)...$(DEFAULT)\n"
+	@printf "$(MAGENTA)[$(NAME)] $(DEFAULT)Cleaning up objects files in "
+	@printf "($(RED)$(OBJ_DIR)$(DEFAULT))...\n"
 	@$(RM) $(OBJ_DIR)
 
 fclean:			clean
-	@printf "$(RED)Cleaning up $(WHITE)$(NAME)$(RED)...$(DEFAULT)\n"
+	@printf "$(MAGENTA)[$(NAME)] $(DEFAULT)Cleaning up "
+	@printf "($(RED)$(NAME)$(DEFAULT))...\n"
 	@$(RM) $(NAME)
 
 re:				fclean all

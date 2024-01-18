@@ -1,19 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sebasnadu <johnavar@student.42berlin.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/18 15:45:31 by sebasnadu         #+#    #+#             */
-/*   Updated: 2024/01/18 18:03:30 by sebasnadu        ###   ########.fr       */
+/*   Created: 2024/01/18 15:44:00 by sebasnadu         #+#    #+#             */
+/*   Updated: 2024/01/18 15:46:26 by sebasnadu        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/philo.h"
+#ifndef PHILO_H
+# define PHILO_H
 
-int	main(void)
-{
-	printf("Hello Wordl!\n");
-	return (0);
-}
+# include <stdio.h>
+
+#endif
