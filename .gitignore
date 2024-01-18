@@ -1,0 +1,23 @@
+# Object files
+*.o
+
+# Libraries
+*.a
+*.lib
+
+# Shared objects (inc. Windows DLLs)
+*.dll
+*.dylib
+
+# Executables
+*.exe
+*.out
+
+# Kernel Module Compile Results
+*.mod*
+*.cmd
+
+# Misc
+.tmp_versions/
+.vscode
+.DS_Store

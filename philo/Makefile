@@ -6,7 +6,7 @@
 #    By: sebasnadu <johnavar@student.42berlin.de>   +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/17 20:42:24 by sebasnadu         #+#    #+#              #
-#    Updated: 2024/01/18 18:55:15 by sebasnadu        ###   ########.fr        #
+#    Updated: 2024/01/18 20:57:41 by sebasnadu        ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -43,7 +43,7 @@ SRC_DIR				:= src
 vpath %.h $(INC_DIR)
 vpath %.c $(SRC_DIR)
 
-HEADERS				:= philo.h
+HEADERS				:= philo.h colors.h
 SOURCE				:= main.c
 OBJECTS				:= $(addprefix $(OBJ_DIR)/, $(SOURCE:.c=.o))
 
@@ -59,7 +59,8 @@ else
 	CFLAGS			:= -Wall -Wextra -Werror -g
 endif
 
-PFLAGS				:= -lpthread
+PFLAGS				:= -pthread
+
 INCLUDES			:= -I$(INC_DIR)
 
 ################################################################################
