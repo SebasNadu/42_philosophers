@@ -6,7 +6,7 @@
 /*   By: sebasnadu <johnavar@student.42berlin.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 15:44:00 by sebasnadu         #+#    #+#             */
-/*   Updated: 2024/01/19 12:55:27 by sebasnadu        ###   ########.fr       */
+/*   Updated: 2024/01/19 15:48:21 by sebasnadu        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # include <stdbool.h>
 # include <limits.h>
 # include <pthread.h>
+# include <errno.h>
 
 # include "colors.h"
 
@@ -29,6 +30,14 @@ typedef enum e_errcode
 	NOT_NUM,
 	TOO_BIG,
 	TOO_SMALL,
+	INVALID_ACTION,
+	MALLOC_FAIL,
+	MTX_MEM,
+	MTX_PERM,
+	MTX_INV,
+	MTX_JOIN,
+	MTX_DEAD,
+	MTX_ID,
 }			t_errcode;
 
 typedef enum e_action
@@ -40,7 +49,7 @@ typedef enum e_action
 	CREATE,
 	JOIN,
 	DETACH,
-}			t_errcode;
+}			t_action;
 
 typedef struct s_data	t_data;
 
@@ -78,6 +87,6 @@ struct s_data
 bool	parse_input(char **av, t_data *data);
 
 // Error
-void	error_handler(int err, bool is_exit, t_data *data);
+void	error_handler(t_errcode err, bool is_exit, t_data *data);
 
 #endif
