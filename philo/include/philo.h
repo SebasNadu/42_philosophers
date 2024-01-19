@@ -6,7 +6,7 @@
 /*   By: sebasnadu <johnavar@student.42berlin.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 15:44:00 by sebasnadu         #+#    #+#             */
-/*   Updated: 2024/01/19 15:48:21 by sebasnadu        ###   ########.fr       */
+/*   Updated: 2024/01/19 18:08:27 by sebasnadu        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,17 +55,19 @@ typedef struct s_data	t_data;
 
 typedef struct s_fork
 {
+	size_t			id;
 	pthread_mutex_t	mtx_fork;
-	size_t			fork_id;
 }					t_fork;
 
 typedef struct s_philo
 {
-	size_t			philo_id;
+	size_t			id;
 	pthread_t		thread_id;
-	t_fork			*left_fork;
-	t_fork			*right_fork;
 	pthread_mutex_t	mtx_philo;
+	t_fork			*first_fork;
+	t_fork			*second_fork;
+	size_t			meals_eaten;
+	long			last_meal_time;
 	t_data			*data;
 }					t_philo;
 
@@ -88,5 +90,11 @@ bool	parse_input(char **av, t_data *data);
 
 // Error
 void	error_handler(t_errcode err, bool is_exit, t_data *data);
+
+// Utils
+void	*safe_malloc(size_t bytes, t_data *data);
+
+// Threads & Mutex
+void	mutex_controller(pthread_mutex_t *mutex, t_action action, t_data *data);
 
 #endif
