@@ -6,7 +6,7 @@
 #    By: sebasnadu <johnavar@student.42berlin.de>   +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/17 20:42:24 by sebasnadu         #+#    #+#              #
-#    Updated: 2024/01/18 20:57:41 by sebasnadu        ###   ########.fr        #
+#    Updated: 2024/01/19 11:25:43 by sebasnadu        ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -44,7 +44,7 @@ vpath %.h $(INC_DIR)
 vpath %.c $(SRC_DIR)
 
 HEADERS				:= philo.h colors.h
-SOURCE				:= main.c
+SOURCE				:= main.c parser.c
 OBJECTS				:= $(addprefix $(OBJ_DIR)/, $(SOURCE:.c=.o))
 
 ################################################################################
