@@ -6,7 +6,7 @@
 /*   By: sebasnadu <johnavar@student.42berlin.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 15:44:00 by sebasnadu         #+#    #+#             */
-/*   Updated: 2024/01/19 12:04:08 by sebasnadu        ###   ########.fr       */
+/*   Updated: 2024/01/19 12:55:27 by sebasnadu        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 
 # include "colors.h"
 
-enum	e_err_msg
+typedef enum e_errcode
 {
 	WRONG_INPUT,
 	NO_MSG,
@@ -29,7 +29,18 @@ enum	e_err_msg
 	NOT_NUM,
 	TOO_BIG,
 	TOO_SMALL,
-};
+}			t_errcode;
+
+typedef enum e_action
+{
+	LOCK,
+	UNLOCK,
+	INIT,
+	DESTROY,
+	CREATE,
+	JOIN,
+	DETACH,
+}			t_errcode;
 
 typedef struct s_data	t_data;
 
@@ -56,6 +67,7 @@ struct s_data
 	long			time_to_eat;
 	long			time_to_sleep;
 	short			nb_meals;
+	t_philo			*philos;
 	t_fork			*forks;
 	long			start_time;
 	pthread_t		monitor;
@@ -63,9 +75,9 @@ struct s_data
 };
 
 // Parser
-bool	input_parser(char **av, t_data *data);
+bool	parse_input(char **av, t_data *data);
 
 // Error
-void	error_handler(int err, bool is_exit);
+void	error_handler(int err, bool is_exit, t_data *data);
 
 #endif
