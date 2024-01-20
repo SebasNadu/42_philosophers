@@ -6,7 +6,7 @@
 /*   By: sebasnadu <johnavar@student.42berlin.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 15:44:00 by sebasnadu         #+#    #+#             */
-/*   Updated: 2024/01/20 17:57:04 by sebasnadu        ###   ########.fr       */
+/*   Updated: 2024/01/20 18:38:06 by sebasnadu        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,5 +134,15 @@ void	precise_usleep(long usec, t_data *data);
 void	mutex_controller(t_mtx *mutex, t_action action, t_data *data);
 void	threads_controller(pthread_t *thread, void *(*function)(void *),
 			void *args, t_action action);
+
+// Setters
+void	set_size_t(t_mtx *mutex, size_t *to, size_t value);
+void	set_long(t_mtx *mutex, long *to, long value);
+void	set_bool(t_mtx *mutex, bool *to, bool value);
+
+// Getters
+bool	get_bool(t_mtx *mutex, bool *from);
+long	get_long(t_mtx *mutex, long *from);
+size_t	get_size_t(t_mtx *mutex, size_t *from);
 
 #endif

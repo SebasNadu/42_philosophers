@@ -6,7 +6,7 @@
 /*   By: sebasnadu <johnavar@student.42berlin.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/20 14:40:04 by sebasnadu         #+#    #+#             */
-/*   Updated: 2024/01/20 16:55:31 by sebasnadu        ###   ########.fr       */
+/*   Updated: 2024/01/20 18:36:06 by sebasnadu        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,9 @@ void	free_data(t_data *data)
 
 	i = -1;
 	if (data->mtx_print.init)
-		destroy_mutex(&data->mtx_monitor.mtx);
-	if (data->mtx_monitor.init)
 		destroy_mutex(&data->mtx_print.mtx);
+	if (data->mtx_supervisor.init)
+		destroy_mutex(&data->mtx_supervisor.mtx);
 	while (++i < (int)data->nb_philo)
 	{
 		if (data->forks[i].mtx_fork.init)

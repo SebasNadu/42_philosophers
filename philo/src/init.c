@@ -6,7 +6,7 @@
 /*   By: sebasnadu <johnavar@student.42berlin.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/20 13:30:23 by sebasnadu         #+#    #+#             */
-/*   Updated: 2024/01/20 17:57:23 by sebasnadu        ###   ########.fr       */
+/*   Updated: 2024/01/20 18:35:12 by sebasnadu        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ void	init_data(t_data *data)
 	data->dinner_starts = false;
 	data->philos = safe_malloc(data->nb_philo * sizeof(t_philo), data);
 	data->forks = safe_malloc(data->nb_philo * sizeof(t_fork), data);
-	data->mtx_monitor.init = false;
+	data->mtx_supervisor.init = false;
 	mutex_controller(&data->mtx_supervisor, INIT, data);
 	data->mtx_print.init = false;
 	mutex_controller(&data->mtx_print, INIT, data);

@@ -6,7 +6,7 @@
 #    By: sebasnadu <johnavar@student.42berlin.de>   +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/17 20:42:24 by sebasnadu         #+#    #+#              #
-#    Updated: 2024/01/20 14:44:22 by sebasnadu        ###   ########.fr        #
+#    Updated: 2024/01/20 18:50:25 by sebasnadu        ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -45,7 +45,7 @@ vpath %.c $(SRC_DIR)
 
 HEADERS				:= philo.h colors.h
 SOURCE				:= main.c parser.c error_handler.c utils.c threads_mutex.c \
-					   init.c free_data.c
+					   init.c free_data.c setters.c getters.c
 OBJECTS				:= $(addprefix $(OBJ_DIR)/, $(SOURCE:.c=.o))
 
 ################################################################################
@@ -70,10 +70,10 @@ INCLUDES			:= -I$(INC_DIR)
 
 SRC_WORD_COUNT		:= $(shell echo -n $(SOURCE) | wc -w)
 OBJ_FILE_COUNT		:= $(shell ls -l $(OBJ_DIR) 2>&1 | grep ".o" | wc -l)
-SRC_COUNT_TOT		:= $(shell expr $(SRC_WORD_COUNT) - $(OBJ_FILE_COUNT))
+SRC_COUNT_TOT		:= $(shell expr $(SRC_WORD_COUNT) - $(OBJ_FILE_COUNT) - 1)
 
 ifeq ($(shell test $(SRC_COUNT_TOT) -le 0; echo $$?), 0)
-	SRC_COUNT_TOT	:= $(shell echo -n $(SOURCE) | wc -w)
+	SRC_COUNT_TOT	:= $(shell expr $(shell echo -n $(SOURCE) | wc -w) - 1)
 endif
 
 SRC_COUNT			= 0
@@ -95,7 +95,7 @@ $(NAME):		$(OBJECTS)
 
 $(OBJ_DIR)/%.o: %.c $(HEADERS) | $(OBJ_DIR)
 	@$(eval SRC_COUNT = $(shell expr $(SRC_COUNT) + 1))
-	@printf "\r%100s\r$(MAGENTA)[$(NAME)] $(GREEN)[ %d/%d (%d%%) ]" \
+	@printf "$(MAGENTA)\r%100s\r[$(NAME)] $(GREEN)[ %d/%d (%d%%) ]" \
 			"" $(SRC_COUNT) $(SRC_COUNT_TOT) $(SRC_PCT) 
 	@printf " $(DEFAULT)Compiling ($(BLUE)$<$(DEFAULT))...\n"
 	@$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@

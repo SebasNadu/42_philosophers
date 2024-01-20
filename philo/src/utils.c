@@ -6,7 +6,7 @@
 /*   By: sebasnadu <johnavar@student.42berlin.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 17:05:39 by sebasnadu         #+#    #+#             */
-/*   Updated: 2024/01/20 17:46:50 by sebasnadu        ###   ########.fr       */
+/*   Updated: 2024/01/20 18:34:35 by sebasnadu        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,15 +35,15 @@ void	precise_usleep(long usec, t_data *data)
 	long	elapsed;
 	long	remaining;
 
-	start = gettime(MICROSECONDS, data);
-	while (gettime(MICROSECONDS, data) - start < usec)
+	start = get_time(MICROSECONDS, data);
+	while (get_time(MICROSECONDS, data) - start < usec)
 	{
-		elapsed = gettime(MICROSECONDS, data) - start;
+		elapsed = get_time(MICROSECONDS, data) - start;
 		remaining = usec - elapsed;
 		if (remaining > 1e3)
 			usleep(remaining / 2);
 		else
-			while (gettime(MICROSECONDS, data) - start < usec)
+			while (get_time(MICROSECONDS, data) - start < usec)
 				return ;
 	}
 }

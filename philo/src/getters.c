@@ -6,13 +6,13 @@
 /*   By: sebasnadu <johnavar@student.42berlin.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/20 13:38:35 by sebasnadu         #+#    #+#             */
-/*   Updated: 2024/01/20 13:49:21 by sebasnadu        ###   ########.fr       */
+/*   Updated: 2024/01/20 18:37:56 by sebasnadu        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philo.h"
 
-bool	get_bool(pthread_mutex_t *mutex, bool *from)
+bool	get_bool(t_mtx *mutex, bool *from)
 {
 	bool	value;
 
@@ -22,7 +22,7 @@ bool	get_bool(pthread_mutex_t *mutex, bool *from)
 	return (value);
 }
 
-long	get_long(pthread_mutex_t *mutex, long *from)
+long	get_long(t_mtx *mutex, long *from)
 {
 	long	value;
 
@@ -32,7 +32,7 @@ long	get_long(pthread_mutex_t *mutex, long *from)
 	return (value);
 }
 
-size_t	get_size_t(pthread_mutex_t *mutex, size_t *from)
+size_t	get_size_t(t_mtx *mutex, size_t *from)
 {
 	size_t	value;
 
