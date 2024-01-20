@@ -6,57 +6,41 @@
 /*   By: sebasnadu <johnavar@student.42berlin.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 15:45:31 by sebasnadu         #+#    #+#             */
-/*   Updated: 2024/01/19 18:18:27 by sebasnadu        ###   ########.fr       */
+/*   Updated: 2024/01/20 18:05:10 by sebasnadu        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philo.h"
 
-void	init_forks(t_data *data)
+void	dinner(void *_philo)
+{
+	t_philo	*philo;
+
+	philo = (t_philo *)_philo;
+}
+
+void	supervisor(t_data *data)
+{
+	data->start_time = get_time(MILLISECONDS);
+	data->dinner_starts = true;
+}
+
+void	dinner_controller(t_data *data)
 {
 	int	i;
 
 	i = -1;
-	while (++i < data->nb_philo)
-	{
-		mutex_controller(&data->forks[i].mtx_fork, INIT, data);
-		data->forks[i].id = (size_t)i;
-	}
-}
-
-void	init_philos(t_data *data)
-{
-	t_philo	*philo;
-	int		i;
-
+	if (data->nb_philo == 1)
+		threads_controller(&data->philos[0].thread_id, alone_dinner,
+			&data->philos[0], CREATE);
+	else
+		while (++i < data->nb_philo)
+			threads_controller(&data->philos[i].thread_id, dinner,
+				&data->philos[i], CREATE);
+	supervisor(data);
 	i = -1;
 	while (++i < data->nb_philo)
-	{
-		philo = data->philos + i;
-		philo->id = (size_t)i + 1;
-		philo->meals_eaten = 0;
-		mutex_controller(&philo->mtx_philo, INIT, data);
-		philo->data = data;
-		if (philo->id % 2 == 0)
-		{
-			philo->first_fork = &data->forks[i];
-			philo->second_fork = &data->forks[i + 1] % data->nb_philo;
-		}
-		else
-		{
-			philo->first_fork = &data->forks[i + 1] % data->nb_philo;
-			philo->second_fork = &data->forks[i];
-		}
-	}
-}
-
-void	init_data(t_data *data)
-{
-	data->philos = safe_malloc(data->nb_philo * sizeof(t_philo), data);
-	data->forks = safe_malloc(data->nb_philo * sizeof(t_fork), data);
-	mutex_controller(&data->mtx_monitor, INIT, data);
-	init_forks(data);
-	init_philos(data);
+		threads_controller(&data->philos[i].thread_id, NULL, NULL, JOIN);
 }
 
 int	main(int ac, char **av)
@@ -67,6 +51,7 @@ int	main(int ac, char **av)
 	{
 		parse_input(av, &data);
 		init_data(&data);
+		dinner_controller(&data);
 	}
 	else
 		error_handler(WRONG_INPUT, true, NULL);

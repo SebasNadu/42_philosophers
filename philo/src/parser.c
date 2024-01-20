@@ -6,7 +6,7 @@
 /*   By: sebasnadu <johnavar@student.42berlin.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 10:53:27 by sebasnadu         #+#    #+#             */
-/*   Updated: 2024/01/19 12:27:46 by sebasnadu        ###   ########.fr       */
+/*   Updated: 2024/01/20 15:15:59 by sebasnadu        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,5 +70,7 @@ bool	parse_input(char **av, t_data *data)
 		data->nb_meals = (short)ft_atol(av[5]);
 	else
 		data->nb_meals = -1;
+	if (data->nb_philo == 0 || data->nb_meals == 0)
+		error_handler(ZERO_ERR, true, NULL);
 	return (true);
 }
