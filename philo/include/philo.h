@@ -6,7 +6,7 @@
 /*   By: sebasnadu <johnavar@student.42berlin.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 15:44:00 by sebasnadu         #+#    #+#             */
-/*   Updated: 2024/01/21 00:55:21 by sebasnadu        ###   ########.fr       */
+/*   Updated: 2024/01/21 21:06:27 by sebasnadu        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,6 @@ typedef enum e_philo_state
 	DROPPING_LFORK,
 	DROPPING_RFORK,
 	DIED,
-	DONE,
 }			t_philo_state;
 
 typedef struct s_data	t_data;
@@ -125,6 +124,7 @@ struct s_data
 	t_fork			*forks;
 	long			start_time;
 	size_t			nb_philo_running;
+	pthread_t		supervisor_id;
 	t_mtx			mtx_supervisor;
 	t_mtx			mtx_print;
 	bool			dinner_starts;
@@ -173,7 +173,7 @@ void	*dinner(void *_philo);
 void	*alone_dinner(void *_philo);
 
 // Supervisor
-void	supervisor(t_data *data);
+void	*supervisor(void *_data);
 
 // States
 void	philo_eat(t_philo *philo);
