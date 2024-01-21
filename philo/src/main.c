@@ -6,35 +6,24 @@
 /*   By: sebasnadu <johnavar@student.42berlin.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 15:45:31 by sebasnadu         #+#    #+#             */
-/*   Updated: 2024/01/20 18:38:56 by sebasnadu        ###   ########.fr       */
+/*   Updated: 2024/01/21 01:38:26 by sebasnadu        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philo.h"
 
-void	*alone_dinner(void *_philo)
+bool	all_ate(t_data *data)
 {
-	(void)_philo;
-	return (NULL);
-}
+	size_t	i;
 
-void	*dinner(void *_philo)
-{
-	t_philo	*philo;
-
-	philo = (t_philo *)_philo;
-	while (!get_bool(&philo->data->mtx_supervisor,
-			&philo->data->dinner_starts))
-		;
-	set_long(&philo->mtx_philo, &philo->last_meal_time,
-		get_time(MILLISECONDS, philo->data));
-	return (NULL);
-}
-
-void	supervisor(t_data *data)
-{
-	data->start_time = get_time(MILLISECONDS, data);
-	data->dinner_starts = true;
+	i = 0;
+	while (i < data->nb_philo)
+	{
+		if (data->philos[i].meals_eaten < data->nb_meals)
+			return (false);
+		++i;
+	}
+	return (true);
 }
 
 void	dinner_controller(t_data *data)
@@ -58,6 +47,8 @@ void	dinner_controller(t_data *data)
 	i = -1;
 	while (++i < data->nb_philo)
 		threads_controller(&data->philos[i].thread_id, NULL, NULL, JOIN);
+	if (all_ate(data))
+		print_state(DONE, &data->philos[0]);
 }
 
 int	main(int ac, char **av)

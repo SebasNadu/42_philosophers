@@ -6,7 +6,7 @@
 #    By: sebasnadu <johnavar@student.42berlin.de>   +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/17 20:42:24 by sebasnadu         #+#    #+#              #
-#    Updated: 2024/01/20 18:50:25 by sebasnadu        ###   ########.fr        #
+#    Updated: 2024/01/20 21:59:20 by sebasnadu        ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -45,7 +45,8 @@ vpath %.c $(SRC_DIR)
 
 HEADERS				:= philo.h colors.h
 SOURCE				:= main.c parser.c error_handler.c utils.c threads_mutex.c \
-					   init.c free_data.c setters.c getters.c
+					   init.c free_data.c setters.c getters.c print.c dinner.c \
+					   supervisor.c states.c
 OBJECTS				:= $(addprefix $(OBJ_DIR)/, $(SOURCE:.c=.o))
 
 ################################################################################
@@ -53,16 +54,20 @@ OBJECTS				:= $(addprefix $(OBJ_DIR)/, $(SOURCE:.c=.o))
 ################################################################################
 
 ifeq ($(DEBUG), 1)
-	CFLAGS			:= -Wall -Wextra -Werror -g -fsanitize=address
+	CFLAGS			:= -Wall -Wextra -Werror -g3 -O3 -fsanitize=address
 else ifeq ($(DEBUG), 2)
-	CFLAGS			:= -Wall -Wextra -Werror -g -fsanitize=thread
+	CFLAGS			:= -Wall -Wextra -Werror -g3 -O3 -fsanitize=thread
 else
-	CFLAGS			:= -Wall -Wextra -Werror -g
+	CFLAGS			:= -Wall -Wextra -Werror
 endif
 
 PFLAGS				:= -pthread
 
 INCLUDES			:= -I$(INC_DIR)
+
+ifdef DEBUG_MODE
+	CFLAGS 			+= -DDEBUG_MODE=$(DEBUG_MODE)
+endif
 
 ################################################################################
 ##                                PROGRESS_BAR                                ##

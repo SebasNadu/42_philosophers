@@ -6,7 +6,7 @@
 /*   By: sebasnadu <johnavar@student.42berlin.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 15:44:00 by sebasnadu         #+#    #+#             */
-/*   Updated: 2024/01/20 18:38:06 by sebasnadu        ###   ########.fr       */
+/*   Updated: 2024/01/21 00:55:21 by sebasnadu        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,10 @@
 # include <unistd.h>
 
 # include "colors.h"
+
+# ifndef DEBUG_MODE
+#  define DEBUG_MODE 0
+# endif
 
 typedef enum e_errcode
 {
@@ -70,6 +74,19 @@ typedef enum e_time_unit
 	MICROSECONDS,
 }			t_time_unit;
 
+typedef enum e_philo_state
+{
+	THINKING,
+	EATING,
+	SLEEPING,
+	TAKING_LFORK,
+	TAKING_RFORK,
+	DROPPING_LFORK,
+	DROPPING_RFORK,
+	DIED,
+	DONE,
+}			t_philo_state;
+
 typedef struct s_data	t_data;
 
 typedef struct s_mtx
@@ -107,6 +124,7 @@ struct s_data
 	t_philo			*philos;
 	t_fork			*forks;
 	long			start_time;
+	size_t			nb_philo_running;
 	t_mtx			mtx_supervisor;
 	t_mtx			mtx_print;
 	bool			dinner_starts;
@@ -139,10 +157,27 @@ void	threads_controller(pthread_t *thread, void *(*function)(void *),
 void	set_size_t(t_mtx *mutex, size_t *to, size_t value);
 void	set_long(t_mtx *mutex, long *to, long value);
 void	set_bool(t_mtx *mutex, bool *to, bool value);
+void	set_size_t_plus(t_mtx *mutex, size_t *to);
 
 // Getters
 bool	get_bool(t_mtx *mutex, bool *from);
 long	get_long(t_mtx *mutex, long *from);
 size_t	get_size_t(t_mtx *mutex, size_t *from);
+bool	is_finished(t_data *data);
+
+// Print
+void	print_state(t_philo_state state, t_philo *philo);
+
+// Dinner
+void	*dinner(void *_philo);
+void	*alone_dinner(void *_philo);
+
+// Supervisor
+void	supervisor(t_data *data);
+
+// States
+void	philo_eat(t_philo *philo);
+void	philo_sleep(t_philo *philo);
+void	philo_think(t_philo	*philo);
 
 #endif
