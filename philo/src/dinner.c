@@ -6,7 +6,7 @@
 /*   By: sebasnadu <johnavar@student.42berlin.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/20 21:50:38 by sebasnadu         #+#    #+#             */
-/*   Updated: 2024/01/21 00:39:15 by sebasnadu        ###   ########.fr       */
+/*   Updated: 2024/01/21 20:21:18 by sebasnadu        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,12 +40,12 @@ void	*dinner(void *_philo)
 	while (!get_bool(&philo->data->mtx_supervisor,
 			&philo->data->dinner_starts))
 		;
-	set_size_t_plus(&philo->mtx_philo, &philo->data->nb_philo_running);
 	set_long(&philo->mtx_philo, &philo->last_meal_time,
 		get_time(MILLISECONDS, philo->data));
+	set_size_t_plus(&philo->data->mtx_supervisor,
+		&philo->data->nb_philo_running);
 	philo_entry(philo);
-	while (!get_bool(&philo->data->mtx_supervisor, &philo->data->dinner_ends)
-		&& !get_bool(&philo->mtx_philo, &philo->is_full))
+	while (!is_finished(philo->data))
 	{
 		if (get_bool(&philo->mtx_philo, &philo->is_full))
 			break ;
