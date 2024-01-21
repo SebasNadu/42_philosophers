@@ -6,7 +6,7 @@
 /*   By: sebasnadu <johnavar@student.42berlin.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 17:03:20 by sebasnadu         #+#    #+#             */
-/*   Updated: 2024/01/20 17:19:16 by sebasnadu        ###   ########.fr       */
+/*   Updated: 2024/01/21 22:04:14 by sebasnadu        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,27 +20,23 @@ static void	p_error(t_errcode err)
 [time_to_sleep(ms)] [number_of_meals](opt)\n\t%se.g. ./philo 5 800 200 \
 200 10%s\n", RED, UYEL, RST, GRN, RST);
 	else if (err == NEG_NUM)
-		printf("%s[WRONG INPUT]%s\n\tPlease enter only positive numbers.\n",
-			RED, RST);
+		printf(RED"[WRONG INPUT]"RST"\n\tPlease enter only positive numbers.\n");
 	else if (err == NOT_NUM)
 		printf("%s[WRONG INPUT]%s\n\tPlease enter only numbers.\n", RED, RST);
 	else if (err == TOO_BIG)
-		printf("%s[WRONG INPUT]%s\n\tPlease enter a number between 0 and 2147483647.\
-\n", RED, RST);
+		printf(RED"[WRONG INPUT]%s\n\tPlease enter a number between 0 and 2147483647.\
+\n", RST);
 	else if (err == TOO_SMALL)
-		printf("%s[WRONG INPUT]%s\n\tUse timestamps major than 60ms.\n",
-			RED, RST);
+		printf(RED"[WRONG INPUT]"RST"\n\tUse timestamps major than 60ms.\n");
 	else if (err == ZERO_ERR)
 		printf("%s[WRONG INPUT]%s\n\tPlease enter a number greater than 0 on \
 the number of philos and the number of meals.\n", RED, RST);
 	else if (err == INVALID_MACTION)
-		printf("%s[INVALID ACTION]%s\n\tPlease enter a valid action for \
-			mutex_controller\n\t%suse [LOCK] [UNLOCK] [INIT] [DESTROY]%s",
-			RED, RST, GRN, RST);
+		printf(RED"[INVALID ACTION]"RST"\n\tPlease enter a valid action for \
+			mutex_controller\n\t"GRN"use [LOCK] [UNLOCK] [INIT] [DESTROY]"RST);
 	else if (err == INVALID_TACTION)
-		printf("%s[INVALID ACTION]%s\n\tPlease enter a valid action for \
-threads_controller\n\t%suse [CREATE] [JOIN] [DETACH]%s",
-			RED, RST, GRN, RST);
+		printf(RED"[INVALID ACTION]"RST"\n\tPlease enter a valid action for \
+threads_controller\n\t"GRN"use [CREATE] [JOIN] [DETACH]"RST);
 	else if (err == MALLOC_FAIL)
 		printf("%s[MALLOC FAILED]%s\n\tMalloc failed. Exiting.\n", RED, RST);
 	else if (err == GETTIME_FAIL)

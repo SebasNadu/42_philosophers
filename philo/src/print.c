@@ -6,7 +6,7 @@
 /*   By: sebasnadu <johnavar@student.42berlin.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/20 21:48:44 by sebasnadu         #+#    #+#             */
-/*   Updated: 2024/01/21 01:29:48 by sebasnadu        ###   ########.fr       */
+/*   Updated: 2024/01/21 21:46:23 by sebasnadu        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,30 +15,27 @@
 static void	print_debug(t_philo_state state, t_philo *philo, long elap)
 {
 	if (state == TAKING_LFORK && !is_finished(philo->data))
-		printf("%s%6ld %s[%s%zu%s] is taking LEFT fork n°[🍴%s%zu%s🍴]\n", MAG,
+		printf("%s%-6ld %s[%s%zu%s] is taking LEFT fork🍴 [%s%zu%s]\n", MAG,
 			elap, RST, CYN, philo->id, RST, YEL, philo->left_fork->id, RST);
 	else if (state == TAKING_RFORK
 		&& !get_bool(&philo->data->mtx_supervisor, &philo->data->dinner_ends))
-		printf("%s%6ld %s[%s%zu%s] is taking RIGHT fork n°[🍴%s%zu%s🍴]\n", MAG,
+		printf("%s%-6ld %s[%s%zu%s] is taking RIGHT fork🍴 [%s%zu%s]\n", MAG,
 			elap, RST, CYN, philo->id, RST, YEL, philo->right_fork->id, RST);
 	else if (state == DROPPING_LFORK && !is_finished(philo->data))
-		printf("%s%6ld %s[%s%zu%s] is dropping LEFT fork n°[🍽️%s%zu%s🍽️]\n", MAG,
+		printf("%s%-6ld %s[%s%zu%s] is dropping LEFT fork🍽️ [%s%zu%s]\n", MAG,
 			elap, RST, CYN, philo->id, RST, YEL, philo->left_fork->id, RST);
 	else if (state == DROPPING_RFORK && !is_finished(philo->data))
-		printf(MAG"%6ld %s[%s%zu%s] is dropping RIGHT fork n°[🍽️%s%zu%s🍽️]\n",
+		printf(MAG"%-6ld %s[%s%zu%s] is dropping RIGHT fork🍽️ [%s%zu%s]\n",
 			elap, RST, CYN, philo->id, RST, YEL, philo->right_fork->id, RST);
 	else if (state == EATING && !is_finished(philo->data))
-		printf("%s%6ld %s[%s%zu%s] is eating n°[🍝%s%zu%s🍝]\n", MAG, elap,
-			RST, CYN, philo->id, RST, YEL, philo->meals_eaten, RST);
+		printf(MAG"%-6ld "RST"["CYN"%zu"RST"] is eating🍝 ["YEL"%zu"RST"]\n",
+			elap, philo->id, philo->meals_eaten);
 	else if (state == SLEEPING && !is_finished(philo->data))
-		printf(MAG"%6ld "RST"["CYN"%zu"RST"] is sleeping😴\n", elap, philo->id);
+		printf(MAG"%-6ld "RST"["CYN"%zu"RST"] is sleeping😴\n", elap, philo->id);
 	else if (state == THINKING && !is_finished(philo->data))
-		printf(MAG"%6ld "RST"["CYN"%zu"RST"] is thinking💭\n",
-			elap, philo->id);
+		printf(MAG"%-6ld "RST"["CYN"%zu"RST"] is thinking💭\n", elap, philo->id);
 	else if (state == DIED)
-		printf(MAG"%6ld "RST"["CYN"%zu"RST"] 💀💀Died💀💀\n", elap, philo->id);
-	else if (state == DONE)
-		printf(MAG"%6ld "GRN"Done!🎉🎉🎉\n"RST, elap);
+		printf(MAG"%-6ld "RST"["CYN"%zu"RST"] 💀💀Died💀💀\n", elap, philo->id);
 }
 
 void	print_state(t_philo_state state, t_philo *philo)
@@ -64,8 +61,6 @@ void	print_state(t_philo_state state, t_philo *philo)
 			printf("%-6ld "CYN"%zu"RST" is thinking\n", elapsed, philo->id);
 		else if (state == DIED)
 			printf("%-6ld "CYN"%zu"RST" died\n", elapsed, philo->id);
-		else if (state == DONE)
-			printf(MAG"%-6ld "GRN"Done!🎉🎉🎉\n"RST, elapsed);
 	}
 	mutex_controller(&philo->data->mtx_print, UNLOCK, philo->data);
 }

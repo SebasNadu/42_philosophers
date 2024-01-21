@@ -6,25 +6,11 @@
 /*   By: sebasnadu <johnavar@student.42berlin.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 15:45:31 by sebasnadu         #+#    #+#             */
-/*   Updated: 2024/01/21 01:38:26 by sebasnadu        ###   ########.fr       */
+/*   Updated: 2024/01/21 21:57:14 by sebasnadu        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philo.h"
-
-bool	all_ate(t_data *data)
-{
-	size_t	i;
-
-	i = 0;
-	while (i < data->nb_philo)
-	{
-		if (data->philos[i].meals_eaten < data->nb_meals)
-			return (false);
-		++i;
-	}
-	return (true);
-}
 
 void	dinner_controller(t_data *data)
 {
@@ -43,12 +29,14 @@ void	dinner_controller(t_data *data)
 			++i;
 		}
 	}
-	supervisor(data);
+	threads_controller(&data->supervisor_id, supervisor, data, CREATE);
+	data->start_time = get_time(MILLISECONDS, data);
+	set_bool(&data->mtx_supervisor, &data->dinner_starts, true);
 	i = -1;
 	while (++i < data->nb_philo)
 		threads_controller(&data->philos[i].thread_id, NULL, NULL, JOIN);
-	if (all_ate(data))
-		print_state(DONE, &data->philos[0]);
+	set_bool(&data->mtx_supervisor, &data->dinner_ends, true);
+	threads_controller(&data->supervisor_id, NULL, NULL, JOIN);
 }
 
 int	main(int ac, char **av)
@@ -60,6 +48,7 @@ int	main(int ac, char **av)
 		parse_input(av, &data);
 		init_data(&data);
 		dinner_controller(&data);
+		free_data(&data);
 	}
 	else
 		error_handler(WRONG_INPUT, true, NULL);
