@@ -6,7 +6,7 @@
 #    By: sebasnadu <johnavar@student.42berlin.de>   +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/17 20:42:24 by sebasnadu         #+#    #+#              #
-#    Updated: 2024/01/21 22:09:58 by sebasnadu        ###   ########.fr        #
+#    Updated: 2024/01/22 17:21:11 by sebasnadu        ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -58,7 +58,7 @@ ifeq ($(DEBUG_MODE), 1)
 else ifeq ($(DEBUG_MODE), 2)
 	CFLAGS			:= -Wall -Wextra -Werror -g3 -O3 -fsanitize=thread
 else
-	CFLAGS			:= -Wall -Wextra -Werror
+	CFLAGS			:= -Wall -Wextra -Werror -O3
 endif
 
 PFLAGS				:= -pthread

@@ -6,7 +6,7 @@
 /*   By: sebasnadu <johnavar@student.42berlin.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/20 21:53:34 by sebasnadu         #+#    #+#             */
-/*   Updated: 2024/01/21 21:47:54 by sebasnadu        ###   ########.fr       */
+/*   Updated: 2024/01/22 17:29:40 by sebasnadu        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static bool	philo_status(t_philo *philo)
 	long	elapsed;
 	long	tt_die_ms;
 
-	if (get_bool(&philo->mtx_philo, &philo->is_full))
+	if (is_full(philo))
 		return (true);
 	elapsed = get_time(MILLISECONDS, philo->data) - get_long(&philo->mtx_philo,
 			&philo->last_meal_time);
@@ -41,8 +41,10 @@ static bool	philo_status(t_philo *philo)
 
 static inline void	*print_ends(t_data *data)
 {
-	return (printf("\tEvery "YEL"Philosopher"RST" had ["CYN"%zu"RST"] meals, all \
-of them "GRN"survived"RST"!🎉🎉🎉\n", data->nb_meals), NULL);
+	return (printf(MAG"%-6ld "RST"Every "YEL"Philosopher"RST" had ["CYN"%zu"RST
+			"] meals, all of them "GRN"survived"RST"!🎉🎉🎉\n",
+			get_time(MILLISECONDS, data) - data->start_time, data->nb_meals),
+		NULL);
 }
 
 void	*supervisor(void *_data)

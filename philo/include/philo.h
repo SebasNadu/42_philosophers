@@ -6,7 +6,7 @@
 /*   By: sebasnadu <johnavar@student.42berlin.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 15:44:00 by sebasnadu         #+#    #+#             */
-/*   Updated: 2024/01/21 21:06:27 by sebasnadu        ###   ########.fr       */
+/*   Updated: 2024/01/22 15:09:57 by sebasnadu        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,10 +79,10 @@ typedef enum e_philo_state
 	THINKING,
 	EATING,
 	SLEEPING,
-	TAKING_LFORK,
-	TAKING_RFORK,
-	DROPPING_LFORK,
-	DROPPING_RFORK,
+	T_LFORK,
+	T_RFORK,
+	D_LFORK,
+	D_RFORK,
 	DIED,
 }			t_philo_state;
 
@@ -164,9 +164,10 @@ bool	get_bool(t_mtx *mutex, bool *from);
 long	get_long(t_mtx *mutex, long *from);
 size_t	get_size_t(t_mtx *mutex, size_t *from);
 bool	is_finished(t_data *data);
+bool	is_full(t_philo *philo);
 
 // Print
-void	print_state(t_philo_state state, t_philo *philo);
+long	print_state(t_philo_state state, t_philo *philo);
 
 // Dinner
 void	*dinner(void *_philo);
@@ -176,8 +177,8 @@ void	*alone_dinner(void *_philo);
 void	*supervisor(void *_data);
 
 // States
-void	philo_eat(t_philo *philo);
-void	philo_sleep(t_philo *philo);
-void	philo_think(t_philo	*philo);
+bool	philo_eat(t_philo *philo);
+bool	philo_sleep(t_philo *philo);
+bool	philo_think(t_philo	*philo, bool is_the_entry);
 
 #endif

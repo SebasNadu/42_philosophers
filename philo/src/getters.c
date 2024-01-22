@@ -6,7 +6,7 @@
 /*   By: sebasnadu <johnavar@student.42berlin.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/20 13:38:35 by sebasnadu         #+#    #+#             */
-/*   Updated: 2024/01/20 21:42:03 by sebasnadu        ###   ########.fr       */
+/*   Updated: 2024/01/22 10:58:28 by sebasnadu        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,4 +45,9 @@ size_t	get_size_t(t_mtx *mutex, size_t *from)
 bool	is_finished(t_data *data)
 {
 	return (get_bool(&data->mtx_supervisor, &data->dinner_ends));
+}
+
+bool	is_full(t_philo *philo)
+{
+	return (get_bool(&philo->mtx_philo, &philo->is_full));
 }
