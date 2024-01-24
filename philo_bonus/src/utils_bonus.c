@@ -6,7 +6,7 @@
 /*   By: sebasnadu <johnavar@student.42berlin.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 11:26:12 by sebasnadu         #+#    #+#             */
-/*   Updated: 2024/01/24 11:26:24 by sebasnadu        ###   ########.fr       */
+/*   Updated: 2024/01/24 20:52:34 by sebasnadu        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,4 +60,9 @@ void	*safe_malloc(size_t bytes, t_data *data)
 	else
 		memset(mem, 0, bytes);
 	return (mem);
+}
+
+int	is_finished(t_data *data)
+{
+	return (*(int *)data->dinner_ends.sem);
 }

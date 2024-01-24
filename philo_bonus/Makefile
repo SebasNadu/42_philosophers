@@ -6,7 +6,7 @@
 #    By: sebasnadu <johnavar@student.42berlin.de>   +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/23 19:48:05 by sebasnadu         #+#    #+#              #
-#    Updated: 2024/01/23 19:51:01 by sebasnadu        ###   ########.fr        #
+#    Updated: 2024/01/24 16:46:27 by sebasnadu        ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -44,9 +44,10 @@ vpath %.h $(INC_DIR)
 vpath %.c $(SRC_DIR)
 
 HEADERS				:= philo_bonus.h colors_bonus.h
-SOURCE				:= main_bonus.c parser_bonus.c error_handler_bonus.c utils_bonus.c controllers_bonus.c \
-					   # init.c free_data.c setters.c getters.c print.c dinner.c \
-					   supervisor.c states.c
+SOURCE				:= main_bonus.c parser_bonus.c error_handler_bonus.c \
+								 utils_bonus.c controllers_bonus.c init_bonus.c \
+								 free_data_bonus.c 
+# setters.c getters.c print.c dinner.c supervisor.c states.c
 OBJECTS				:= $(addprefix $(OBJ_DIR)/, $(SOURCE:.c=.o))
 
 ################################################################################

@@ -6,7 +6,7 @@
 /*   By: sebasnadu <johnavar@student.42berlin.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 19:52:19 by sebasnadu         #+#    #+#             */
-/*   Updated: 2024/01/24 12:10:20 by sebasnadu        ###   ########.fr       */
+/*   Updated: 2024/01/24 21:23:53 by sebasnadu        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@
 # include <sys/wait.h>
 # include <fcntl.h>
 # include <string.h>
+# include <signal.h>
 
 # include "colors_bonus.h"
 
@@ -38,7 +39,7 @@
 # define S_PRINT "/print"
 # define S_DINNER_STARTS "/dinner_starts"
 # define S_DINNER_ENDS "/dinner_ends"
-# define S_IS_FULL "/is_full"
+# define S_FULL_PHILOS "/full_philos"
 
 typedef enum e_errcode
 {
@@ -54,6 +55,7 @@ typedef enum e_errcode
 	MALLOC_FAIL,
 	GETTIME_FAIL,
 	GETTIME_INV,
+	FORK_FAIL,
 	SEM_ACC,
 	SEM_AINV,
 	SEM_TLONG,
@@ -78,7 +80,7 @@ typedef enum e_action
 	WAIT,
 	POST,
 	CLOSE,
-	DESTROY,
+	UNLINK,
 	CREATE,
 	JOIN,
 	DETACH,
@@ -116,12 +118,10 @@ typedef struct s_philo
 {
 	size_t		id;
 	pid_t		pid;
-	ptherad_t	tid;
 	t_sem		*left_fork;
 	t_sem		*right_fork;
 	size_t		meals_eaten;
 	long		last_meal_time;
-	t_sem		s_is_full;
 	t_data		*data;
 }					t_philo;
 
@@ -141,6 +141,7 @@ struct s_data
 	t_sem		s_print;
 	t_sem		s_dinner_starts;
 	t_sem		s_dinner_ends;
+	t_sem		s_full_philos;
 };
 
 #endif

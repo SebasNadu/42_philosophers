@@ -6,7 +6,7 @@
 /*   By: sebasnadu <johnavar@student.42berlin.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 21:39:56 by sebasnadu         #+#    #+#             */
-/*   Updated: 2024/01/24 10:50:06 by sebasnadu        ###   ########.fr       */
+/*   Updated: 2024/01/24 17:41:05 by sebasnadu        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,9 +44,11 @@ threads_controller\n\t"GRN"use [CREATE] [JOIN] [DETACH]"RST);
 	else if (err == GETTIME_INV)
 		printf("%s[GETTIME FAILED]%s\n\tPlease enter a valid time unit.\n\t\
 %s[SECONDS][MILLISECONDS][MICROSECONDS]%s\n", RED, RST, GRN, RST);
+	else if (err == FORK_FAIL)
+		printf("%s[FORK FAILED]%s\n\tFork failed. Exiting.\n", RED, RST);
 }
 
-static void	p_mutexerror(t_errcode err)
+static void	p_semerror(t_errcode err)
 {
 	if (err == SEM_AINV)
 		printf("%s[SEMAPHORE ERROR]%s\n\tPlease enter a valid semaphore \

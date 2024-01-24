@@ -6,7 +6,7 @@
 /*   By: sebasnadu <johnavar@student.42berlin.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 09:33:36 by sebasnadu         #+#    #+#             */
-/*   Updated: 2024/01/24 11:33:52 by sebasnadu        ###   ########.fr       */
+/*   Updated: 2024/01/24 21:23:33 by sebasnadu        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,11 +79,31 @@ void	sem_controller(t_sem *s_data, t_action act, size_t size, t_data *data)
 	else if (act == POST)
 		s_data->sem = sem_post(s_data->sem);
 	else if (act == CLOSE)
+	{
 		s_data->sem = sem_close(s_data->sem);
-	else if (act == DESTROY)
+		s_data->init = false;
+	}
+	else if (act == UNLINK)
+	{
 		s_data->sem = sem_unlink(s_data->path);
+		s_data->init = false;
+	}
 	else
 		error_handler(INVALID_SACTION, true, data);
 	if (s_data->sem == SEM_FAILED || s_data->sem == -1)
 		sem_error_handler(s_data->sem, act, data);
+}
+
+void	process_controller(t_philo *philo, void (*function)(t_philo *))
+{
+	philo->pid = fork();
+	if (philo->pid == -1)
+		error_handler(FORK_FAIL, true, philo->data);
+	if (philo->pid == 0)
+	{
+		threads_controller(&data->supervisor_id, philo_supervisor, philo,
+			CREATE);
+		threads_controller(&data->supervisor_id, NULL, NULL, DETACH);
+		function(philo);
+	}
 }

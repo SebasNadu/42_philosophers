@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   print.c                                            :+:      :+:    :+:   */
+/*   print_bonus.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sebasnadu <johnavar@student.42berlin.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/20 21:48:44 by sebasnadu         #+#    #+#             */
-/*   Updated: 2024/01/24 20:46:01 by sebasnadu        ###   ########.fr       */
+/*   Created: 2024/01/24 19:47:51 by sebasnadu         #+#    #+#             */
+/*   Updated: 2024/01/24 21:02:07 by sebasnadu        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,17 +15,17 @@
 static void	print_debug(t_philo_state state, t_philo *philo, long elap)
 {
 	if (state == T_LFORK && !is_finished(philo->data))
-		printf("%s%-6ld %s[%s%zu%s] is taking LEFT fork🍴 [%s%zu%s]\n", MAG,
-			elap, RST, CYN, philo->id, RST, YEL, philo->left_fork->id, RST);
+		printf("%s%-6ld %s[%s%zu%s] is taking LEFT fork🍴 [%s%d%s]\n", MAG, elap,
+			RST, CYN, philo->id, RST, YEL, *(int *)philo->left_fork->sem, RST);
 	else if (state == T_RFORK && !is_finished(philo->data))
-		printf("%s%-6ld %s[%s%zu%s] is taking RIGHT fork🍴 [%s%zu%s]\n", MAG,
-			elap, RST, CYN, philo->id, RST, YEL, philo->right_fork->id, RST);
+		printf("%s%-6ld %s[%s%zu%s] is taking RIGHT fork🍴 [%s%d%s]\n", MAG, elap,
+			RST, CYN, philo->id, RST, YEL, *(int *)philo->left_fork->sem, RST);
 	else if (state == D_LFORK && !is_finished(philo->data))
-		printf("%s%-6ld %s[%s%zu%s] is dropping LEFT fork🍽️ [%s%zu%s]\n", MAG,
-			elap, RST, CYN, philo->id, RST, YEL, philo->left_fork->id, RST);
+		printf(MAG"%-6ld %s[%s%zu%s] is dropping LEFT fork🍽️ [%s%d%s]\n", elap,
+			RST, CYN, philo->id, RST, YEL, *(int *)philo->left_fork->sem, RST);
 	else if (state == D_RFORK && !is_finished(philo->data))
-		printf(MAG"%-6ld %s[%s%zu%s] is dropping RIGHT fork🍽️ [%s%zu%s]\n",
-			elap, RST, CYN, philo->id, RST, YEL, philo->right_fork->id, RST);
+		printf(MAG"%-6ld %s[%s%zu%s] is dropping RIGHT fork🍽️ [%s%zu%s]\n", elap,
+			RST, CYN, philo->id, RST, YEL, *(int *)philo->left_fork->sem, RST);
 	else if (state == EATING && !is_finished(philo->data))
 		printf(MAG"%-6ld "RST"["CYN"%zu"RST"] is eating🍝 ["YEL"%zu"RST"]\n",
 			elap, philo->id, philo->meals_eaten);
@@ -44,9 +44,9 @@ long	print_state(t_philo_state state, t_philo *philo)
 
 	now = get_time(MILLISECONDS, philo->data);
 	elapsed = now - philo->data->start_time;
-	if (is_full(philo))
+	if (*(int *)philo->s_is_full.sem)
 		return (now);
-	mutex_controller(&philo->data->mtx_print, LOCK, philo->data);
+	sem_controller(&philo->data->s_print, WAIT, 0, philo->data);
 	if (DEBUG_MODE)
 		print_debug(state, philo, elapsed);
 	else if (state != D_RFORK && state != D_LFORK)
@@ -62,6 +62,6 @@ long	print_state(t_philo_state state, t_philo *philo)
 		else if (state == DIED)
 			printf("%-6ld "CYN"%zu"RST" died\n", elapsed, philo->id);
 	}
-	mutex_controller(&philo->data->mtx_print, UNLOCK, philo->data);
+	sem_controller(&philo->data->s_print, POST, 0, philo->data);
 	return (now);
 }
