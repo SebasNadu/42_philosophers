@@ -5,8 +5,8 @@
 #                                                     +:+ +:+         +:+      #
 #    By: sebasnadu <johnavar@student.42berlin.de>   +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2024/01/17 20:42:24 by sebasnadu         #+#    #+#              #
-#    Updated: 2024/01/23 19:55:52 by sebasnadu        ###   ########.fr        #
+#    Created: 2024/01/23 19:48:05 by sebasnadu         #+#    #+#              #
+#    Updated: 2024/01/23 19:51:01 by sebasnadu        ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@
 ##                                PHILOSOPHERS                                ##
 ################################################################################
 
-NAME				:= philo
+NAME				:= philo_bonus
 CC					:= cc
 RM 					:= rm -rf
 
@@ -43,9 +43,9 @@ SRC_DIR				:= src
 vpath %.h $(INC_DIR)
 vpath %.c $(SRC_DIR)
 
-HEADERS				:= philo.h colors.h structs.h
-SOURCE				:= main.c parser.c error_handler.c utils.c controllers.c \
-					   init.c free_data.c setters.c getters.c print.c dinner.c \
+HEADERS				:= philo_bonus.h colors_bonus.h
+SOURCE				:= main_bonus.c parser_bonus.c error_handler_bonus.c utils_bonus.c controllers_bonus.c \
+					   # init.c free_data.c setters.c getters.c print.c dinner.c \
 					   supervisor.c states.c
 OBJECTS				:= $(addprefix $(OBJ_DIR)/, $(SOURCE:.c=.o))
 

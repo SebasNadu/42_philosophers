@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   utils_bonus.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sebasnadu <johnavar@student.42berlin.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/19 17:05:39 by sebasnadu         #+#    #+#             */
-/*   Updated: 2024/01/24 11:25:06 by sebasnadu        ###   ########.fr       */
+/*   Created: 2024/01/24 11:26:12 by sebasnadu         #+#    #+#             */
+/*   Updated: 2024/01/24 11:26:24 by sebasnadu        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/philo.h"
+#include "../include/philo_bonus.h"
 
 long	get_time(t_time_unit t_unit, t_data *data)
 {
