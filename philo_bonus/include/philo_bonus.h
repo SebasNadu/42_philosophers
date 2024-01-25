@@ -6,7 +6,7 @@
 /*   By: sebasnadu <johnavar@student.42berlin.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 19:52:19 by sebasnadu         #+#    #+#             */
-/*   Updated: 2024/01/24 21:23:53 by sebasnadu        ###   ########.fr       */
+/*   Updated: 2024/01/25 16:00:39 by sebasnadu        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,10 @@
 # include <fcntl.h>
 # include <string.h>
 # include <signal.h>
+# include <errno.h>
 
 # include "colors_bonus.h"
+# include "structs_bonus.h"
 
 # ifndef DEBUG_MODE
 #  define DEBUG_MODE 0
@@ -41,107 +43,46 @@
 # define S_DINNER_ENDS "/dinner_ends"
 # define S_FULL_PHILOS "/full_philos"
 
-typedef enum e_errcode
-{
-	WRONG_INPUT,
-	NO_MSG,
-	NEG_NUM,
-	NOT_NUM,
-	TOO_BIG,
-	TOO_SMALL,
-	ZERO_ERR,
-	INVALID_SACTION,
-	INVALID_TACTION,
-	MALLOC_FAIL,
-	GETTIME_FAIL,
-	GETTIME_INV,
-	FORK_FAIL,
-	SEM_ACC,
-	SEM_AINV,
-	SEM_TLONG,
-	SEM_NFILE,
-	SEM_INTR,
-	SEM_OVER,
-	SEM_NON,
-	SEM_NENT,
-	SEM_NSPC,
-	SEM_DEAD,
-	THD_MEM,
-	THD_PERM,
-	THD_INV,
-	THD_JOIN,
-	THD_ID,
-	THD_DEAD,
-}			t_errcode;
+// Parser_bonus
+bool	parse_input(char **av, t_data *data);
 
-typedef enum e_action
-{
-	OPEN,
-	WAIT,
-	POST,
-	CLOSE,
-	UNLINK,
-	CREATE,
-	JOIN,
-	DETACH,
-}			t_action;
+// Init_bonus
+void	init_data(t_data *data);
 
-typedef enum e_time_unit
-{
-	SECONDS,
-	MILLISECONDS,
-	MICROSECONDS,
-}			t_time_unit;
+// Error_handler_bonus
+void	error_handler(t_errcode err, bool is_exit, t_data *data);
 
-typedef enum e_philo_state
-{
-	THINKING,
-	EATING,
-	SLEEPING,
-	T_LFORK,
-	T_RFORK,
-	D_LFORK,
-	D_RFORK,
-	DIED,
-}			t_philo_state;
+// Free_data_bonus
+void	free_data(t_data *data);
+void	clean_sems(t_data *data);
+void	free_sems(t_data	*data);
 
-typedef struct s_data	t_data;
+// Controllers_bonus
+void	process_controller(t_philo *philo, void (*function)(t_philo *));
+void	sem_controller(t_sem *s_data, t_action act, size_t size, t_data *data);
+void	threads_controller(pthread_t *thread, void *(*function)(void *),
+			void *args, t_action action);
 
-typedef struct s_sem
-{
-	const char			*path;
-	bool				init;
-	sem_t				*sem;
-}					t_sem;
+// Print_bonus
+long	print_state(t_philo_state state, t_philo *philo);
 
-typedef struct s_philo
-{
-	size_t		id;
-	pid_t		pid;
-	t_sem		*left_fork;
-	t_sem		*right_fork;
-	size_t		meals_eaten;
-	long		last_meal_time;
-	t_data		*data;
-}					t_philo;
+// Supervisor_bonus
+void	*supervisor(void *_philo);
 
-struct s_data
-{
-	size_t		nb_philo;
-	long		time_to_die;
-	long		time_to_eat;
-	long		time_to_sleep;
-	size_t		nb_meals;
-	t_philo		*philos;
-	t_sem		forks;
-	long		start_time;
-	t_sem		s_nphilo_running;
-	pthread_t	supervisor_id;
-	t_sem		s_supervisor;
-	t_sem		s_print;
-	t_sem		s_dinner_starts;
-	t_sem		s_dinner_ends;
-	t_sem		s_full_philos;
-};
+// Dinner_bonus
+void	alone_dinner(t_philo *philo);
+void	dinner(t_philo *philo);
+
+// States_bonus
+bool	philo_think(t_philo	*philo, bool is_the_entry);
+bool	philo_sleep(t_philo *philo);
+bool	philo_eat(t_philo *philo);
+
+// Utils_bonus
+bool	is_full(t_philo *philo);
+bool	is_finished(t_data *data);
+void	*safe_malloc(size_t bytes, t_data *data);
+void	precise_usleep(long usec, t_data *data);
+long	get_time(t_time_unit t_unit, t_data *data);
 
 #endif

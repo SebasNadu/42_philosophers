@@ -6,11 +6,11 @@
 /*   By: sebasnadu <johnavar@student.42berlin.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 19:47:51 by sebasnadu         #+#    #+#             */
-/*   Updated: 2024/01/24 21:02:07 by sebasnadu        ###   ########.fr       */
+/*   Updated: 2024/01/25 17:06:35 by sebasnadu        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/philo.h"
+#include "../include/philo_bonus.h"
 
 static void	print_debug(t_philo_state state, t_philo *philo, long elap)
 {
@@ -24,7 +24,7 @@ static void	print_debug(t_philo_state state, t_philo *philo, long elap)
 		printf(MAG"%-6ld %s[%s%zu%s] is dropping LEFT fork🍽️ [%s%d%s]\n", elap,
 			RST, CYN, philo->id, RST, YEL, *(int *)philo->left_fork->sem, RST);
 	else if (state == D_RFORK && !is_finished(philo->data))
-		printf(MAG"%-6ld %s[%s%zu%s] is dropping RIGHT fork🍽️ [%s%zu%s]\n", elap,
+		printf(MAG"%-6ld %s[%s%zu%s] is dropping RIGHT fork🍽️ [%s%d%s]\n", elap,
 			RST, CYN, philo->id, RST, YEL, *(int *)philo->left_fork->sem, RST);
 	else if (state == EATING && !is_finished(philo->data))
 		printf(MAG"%-6ld "RST"["CYN"%zu"RST"] is eating🍝 ["YEL"%zu"RST"]\n",
@@ -44,8 +44,6 @@ long	print_state(t_philo_state state, t_philo *philo)
 
 	now = get_time(MILLISECONDS, philo->data);
 	elapsed = now - philo->data->start_time;
-	if (*(int *)philo->s_is_full.sem)
-		return (now);
 	sem_controller(&philo->data->s_print, WAIT, 0, philo->data);
 	if (DEBUG_MODE)
 		print_debug(state, philo, elapsed);

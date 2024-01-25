@@ -6,7 +6,7 @@
 /*   By: sebasnadu <johnavar@student.42berlin.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 15:45:31 by sebasnadu         #+#    #+#             */
-/*   Updated: 2024/01/21 21:57:14 by sebasnadu        ###   ########.fr       */
+/*   Updated: 2024/01/25 12:07:46 by sebasnadu        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,9 @@ void	dinner_controller(t_data *data)
 	threads_controller(&data->supervisor_id, supervisor, data, CREATE);
 	data->start_time = get_time(MILLISECONDS, data);
 	set_bool(&data->mtx_supervisor, &data->dinner_starts, true);
-	i = -1;
-	while (++i < data->nb_philo)
-		threads_controller(&data->philos[i].thread_id, NULL, NULL, JOIN);
+	i = 0;
+	while (i < data->nb_philo)
+		threads_controller(&data->philos[i++].thread_id, NULL, NULL, JOIN);
 	set_bool(&data->mtx_supervisor, &data->dinner_ends, true);
 	threads_controller(&data->supervisor_id, NULL, NULL, JOIN);
 }

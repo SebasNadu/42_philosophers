@@ -6,7 +6,7 @@
 /*   By: sebasnadu <johnavar@student.42berlin.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 11:26:12 by sebasnadu         #+#    #+#             */
-/*   Updated: 2024/01/24 20:52:34 by sebasnadu        ###   ########.fr       */
+/*   Updated: 2024/01/25 13:49:36 by sebasnadu        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,12 @@ void	*safe_malloc(size_t bytes, t_data *data)
 	return (mem);
 }
 
-int	is_finished(t_data *data)
+bool	is_finished(t_data *data)
 {
-	return (*(int *)data->dinner_ends.sem);
+	return (*(int *)data->s_dinner_ends.sem);
+}
+
+bool	is_full(t_philo *philo)
+{
+	return (philo->meals_eaten == philo->data->nb_meals);
 }

@@ -6,7 +6,7 @@
 #    By: sebasnadu <johnavar@student.42berlin.de>   +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/23 19:48:05 by sebasnadu         #+#    #+#              #
-#    Updated: 2024/01/24 16:46:27 by sebasnadu        ###   ########.fr        #
+#    Updated: 2024/01/25 17:58:15 by sebasnadu        ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -43,11 +43,11 @@ SRC_DIR				:= src
 vpath %.h $(INC_DIR)
 vpath %.c $(SRC_DIR)
 
-HEADERS				:= philo_bonus.h colors_bonus.h
+HEADERS				:= philo_bonus.h colors_bonus.h structs_bonus.h
 SOURCE				:= main_bonus.c parser_bonus.c error_handler_bonus.c \
 								 utils_bonus.c controllers_bonus.c init_bonus.c \
-								 free_data_bonus.c 
-# setters.c getters.c print.c dinner.c supervisor.c states.c
+								 free_data_bonus.c print_bonus.c dinner_bonus.c \
+								 supervisor_bonus.c states_bonus.c
 OBJECTS				:= $(addprefix $(OBJ_DIR)/, $(SOURCE:.c=.o))
 
 ################################################################################
@@ -59,7 +59,7 @@ ifeq ($(DEBUG_MODE), 1)
 else ifeq ($(DEBUG_MODE), 2)
 	CFLAGS			:= -Wall -Wextra -Werror -g3 -O3 -fsanitize=thread
 else
-	CFLAGS			:= -Wall -Wextra -Werror -O3
+	CFLAGS			:= -Wall -Wextra -Werror -g3 -O3
 endif
 
 PFLAGS				:= -pthread

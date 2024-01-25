@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   structs.h                                          :+:      :+:    :+:   */
+/*   structs_bonus.h                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sebasnadu <johnavar@student.42berlin.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/23 19:54:20 by sebasnadu         #+#    #+#             */
-/*   Updated: 2024/01/25 13:45:56 by sebasnadu        ###   ########.fr       */
+/*   Created: 2024/01/25 13:43:37 by sebasnadu         #+#    #+#             */
+/*   Updated: 2024/01/25 13:44:38 by sebasnadu        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef STRUCTS_H
-# define STRUCTS_H
+#ifndef STRUCTS_BONUS_H
+# define STRUCTS_BONUS_H
 
 typedef enum e_errcode
 {
@@ -22,17 +22,22 @@ typedef enum e_errcode
 	TOO_BIG,
 	TOO_SMALL,
 	ZERO_ERR,
-	INVALID_MACTION,
+	INVALID_SACTION,
 	INVALID_TACTION,
 	MALLOC_FAIL,
 	GETTIME_FAIL,
 	GETTIME_INV,
-	MTX_VINV,
-	MTX_AINV,
-	MTX_DEAD,
-	MTX_PERM,
-	MTX_MEM,
-	MTX_BUSY,
+	FORK_FAIL,
+	SEM_ACC,
+	SEM_AINV,
+	SEM_TLONG,
+	SEM_NFILE,
+	SEM_INTR,
+	SEM_OVER,
+	SEM_NON,
+	SEM_NENT,
+	SEM_NSPC,
+	SEM_DEAD,
 	THD_MEM,
 	THD_PERM,
 	THD_INV,
@@ -43,10 +48,11 @@ typedef enum e_errcode
 
 typedef enum e_action
 {
-	LOCK,
-	UNLOCK,
-	INIT,
-	DESTROY,
+	OPEN,
+	WAIT,
+	POST,
+	CLOSE,
+	UNLINK,
 	CREATE,
 	JOIN,
 	DETACH,
@@ -73,47 +79,41 @@ typedef enum e_philo_state
 
 typedef struct s_data	t_data;
 
-typedef struct s_mtx
+typedef struct s_sem
 {
-	bool			init;
-	pthread_mutex_t	mtx;
-}					t_mtx;
-
-typedef struct s_fork
-{
-	size_t			id;
-	t_mtx			mtx_fork;
-}					t_fork;
+	const char			*path;
+	bool				init;
+	sem_t				*sem;
+}					t_sem;
 
 typedef struct s_philo
 {
-	size_t			id;
-	pthread_t		thread_id;
-	t_mtx			mtx_philo;
-	t_fork			*left_fork;
-	t_fork			*right_fork;
-	size_t			meals_eaten;
-	long			last_meal_time;
-	bool			is_full;
-	t_data			*data;
+	size_t		id;
+	pid_t		pid;
+	t_sem		*left_fork;
+	t_sem		*right_fork;
+	size_t		meals_eaten;
+	long		last_meal_time;
+	t_data		*data;
 }					t_philo;
 
 struct s_data
 {
-	size_t			nb_philo;
-	long			time_to_die;
-	long			time_to_eat;
-	long			time_to_sleep;
-	size_t			nb_meals;
-	t_philo			*philos;
-	t_fork			*forks;
-	long			start_time;
-	size_t			nb_philo_running;
-	pthread_t		supervisor_id;
-	t_mtx			mtx_supervisor;
-	t_mtx			mtx_print;
-	bool			dinner_starts;
-	bool			dinner_ends;
+	size_t		nb_philo;
+	long		time_to_die;
+	long		time_to_eat;
+	long		time_to_sleep;
+	size_t		nb_meals;
+	t_philo		*philos;
+	t_sem		forks;
+	long		start_time;
+	t_sem		s_nphilo_running;
+	pthread_t	supervisor_id;
+	t_sem		s_supervisor;
+	t_sem		s_print;
+	t_sem		s_dinner_starts;
+	t_sem		s_dinner_ends;
+	t_sem		s_full_philos;
 };
 
 #endif

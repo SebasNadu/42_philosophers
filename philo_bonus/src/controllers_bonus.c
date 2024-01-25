@@ -6,7 +6,7 @@
 /*   By: sebasnadu <johnavar@student.42berlin.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 09:33:36 by sebasnadu         #+#    #+#             */
-/*   Updated: 2024/01/24 21:23:33 by sebasnadu        ###   ########.fr       */
+/*   Updated: 2024/01/25 17:53:16 by sebasnadu        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,25 +44,29 @@ void	threads_controller(pthread_t *thread, void *(*function)(void *),
 		error_handler(INVALID_TACTION, true, NULL);
 }
 
-static void	sem_error_handler(sem_t status, t_action action, t_data *data)
+static void	sem_error_handler(int error_code, t_data *data)
 {
-	if (status == 0)
+	if (error_code == 0)
 		return ;
-	else if (status == EINVAL)
+	if (error_code == -1 || error_code == *SEM_FAILED)
+		error_code = errno;
+	else
+		return ;
+	if (error_code == EINVAL)
 		error_handler(SEM_AINV, true, data);
-	else if (status == EACCESS)
+	else if (error_code == EACCES)
 		error_handler(SEM_ACC, true, data);
-	else if (status == EINTR)
+	else if (error_code == EINTR)
 		error_handler(SEM_INTR, true, data);
-	else if (status == ENAMETOOLONG)
+	else if (error_code == ENAMETOOLONG)
 		error_handler(SEM_TLONG, true, data);
-	else if (status == ENFILE)
+	else if (error_code == ENFILE)
 		error_handler(SEM_NFILE, true, data);
-	else if (status == ENOENT)
+	else if (error_code == ENOENT)
 		error_handler(SEM_NENT, true, data);
-	else if (status == ENOSPC)
+	else if (error_code == ENOSPC)
 		error_handler(SEM_NSPC, true, data);
-	else if (status == EDEADLK)
+	else if (error_code == EDEADLK)
 		error_handler(SEM_DEAD, true, data);
 }
 
@@ -71,27 +75,22 @@ void	sem_controller(t_sem *s_data, t_action act, size_t size, t_data *data)
 	if (act == OPEN)
 	{
 		s_data->sem = sem_open(s_data->path, O_CREAT, 0644, size);
-		if (s_data->sem != SEM_FAILED)
-			s_data->init = true;
+		if (s_data->sem == SEM_FAILED)
+			sem_error_handler(*s_data->sem, data);
+		s_data->init = true;
 	}
 	else if (act == WAIT)
-		s_data->sem = sem_wait(s_data->sem);
+		sem_error_handler(sem_wait(s_data->sem), data);
 	else if (act == POST)
-		s_data->sem = sem_post(s_data->sem);
+		sem_error_handler(sem_post(s_data->sem), data);
 	else if (act == CLOSE)
-	{
-		s_data->sem = sem_close(s_data->sem);
-		s_data->init = false;
-	}
+		sem_error_handler(sem_close(s_data->sem), data);
 	else if (act == UNLINK)
-	{
-		s_data->sem = sem_unlink(s_data->path);
-		s_data->init = false;
-	}
+		sem_error_handler(sem_unlink(s_data->path), data);
 	else
 		error_handler(INVALID_SACTION, true, data);
-	if (s_data->sem == SEM_FAILED || s_data->sem == -1)
-		sem_error_handler(s_data->sem, act, data);
+	if (act == CLOSE || act == UNLINK)
+		s_data->init = false;
 }
 
 void	process_controller(t_philo *philo, void (*function)(t_philo *))
@@ -101,9 +100,12 @@ void	process_controller(t_philo *philo, void (*function)(t_philo *))
 		error_handler(FORK_FAIL, true, philo->data);
 	if (philo->pid == 0)
 	{
-		threads_controller(&data->supervisor_id, philo_supervisor, philo,
+		threads_controller(&philo->data->supervisor_id, supervisor, philo,
 			CREATE);
-		threads_controller(&data->supervisor_id, NULL, NULL, DETACH);
 		function(philo);
+		threads_controller(&philo->data->supervisor_id, NULL, NULL, JOIN);
+		free_sems(philo->data);
+		free(philo);
+		exit(EXIT_SUCCESS);
 	}
 }
