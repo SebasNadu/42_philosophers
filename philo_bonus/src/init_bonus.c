@@ -6,7 +6,7 @@
 /*   By: sebasnadu <johnavar@student.42berlin.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 21:56:34 by sebasnadu         #+#    #+#             */
-/*   Updated: 2024/01/25 18:02:28 by sebasnadu        ###   ########.fr       */
+/*   Updated: 2024/01/25 22:11:11 by sebasnadu        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ static void	init_philos(t_data *data)
 
 void	init_data(t_data *data)
 {
+	clean_sems();
 	data->forks.init = false;
 	data->forks.path = S_FORKS;
 	data->s_nphilo_running.init = false;
@@ -47,7 +48,7 @@ void	init_data(t_data *data)
 	data->s_dinner_ends.path = S_DINNER_ENDS;
 	data->s_full_philos.init = false;
 	data->s_full_philos.path = S_FULL_PHILOS;
-	clean_sems(data);
+	data->philos = safe_malloc(data->nb_philo * sizeof(t_philo), data);
 	sem_controller(&data->forks, OPEN, data->nb_philo, data);
 	sem_controller(&data->s_nphilo_running, OPEN, data->nb_philo, data);
 	sem_controller(&data->s_supervisor, OPEN, 1, data);
@@ -55,6 +56,5 @@ void	init_data(t_data *data)
 	sem_controller(&data->s_dinner_starts, 0, OPEN, data);
 	sem_controller(&data->s_dinner_ends, 0, OPEN, data);
 	sem_controller(&data->s_full_philos, 0, OPEN, data);
-	data->philos = safe_malloc(data->nb_philo * sizeof(t_philo), data);
 	init_philos(data);
 }

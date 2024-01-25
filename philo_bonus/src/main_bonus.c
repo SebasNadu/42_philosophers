@@ -6,7 +6,7 @@
 /*   By: sebasnadu <johnavar@student.42berlin.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 21:38:27 by sebasnadu         #+#    #+#             */
-/*   Updated: 2024/01/25 18:07:48 by sebasnadu        ###   ########.fr       */
+/*   Updated: 2024/01/25 18:44:12 by sebasnadu        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,9 +55,9 @@ int	main(int ac, char **av)
 	{
 		parse_input(av, &data);
 		init_data(&data);
-		dinner_controller(&data);
-		clean_sems(&data);
-		free_sems(&data);
+		// dinner_controller(&data);
+		// clean_sems(&data);
+		// free_sems(&data);
 		free(data.philos);
 	}
 	else

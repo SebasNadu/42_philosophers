@@ -6,7 +6,7 @@
 /*   By: sebasnadu <johnavar@student.42berlin.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 19:52:19 by sebasnadu         #+#    #+#             */
-/*   Updated: 2024/01/25 16:00:39 by sebasnadu        ###   ########.fr       */
+/*   Updated: 2024/01/25 18:43:06 by sebasnadu        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ void	error_handler(t_errcode err, bool is_exit, t_data *data);
 
 // Free_data_bonus
 void	free_data(t_data *data);
-void	clean_sems(t_data *data);
+void	clean_sems(void);
 void	free_sems(t_data	*data);
 
 // Controllers_bonus

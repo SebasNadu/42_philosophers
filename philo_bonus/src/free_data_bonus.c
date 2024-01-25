@@ -6,7 +6,7 @@
 /*   By: sebasnadu <johnavar@student.42berlin.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 12:21:24 by sebasnadu         #+#    #+#             */
-/*   Updated: 2024/01/25 13:24:21 by sebasnadu        ###   ########.fr       */
+/*   Updated: 2024/01/25 18:42:48 by sebasnadu        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,15 +23,15 @@ void	free_sems(t_data	*data)
 	sem_controller(&data->s_full_philos, CLOSE, 0, data);
 }
 
-void	clean_sems(t_data *data)
+void	clean_sems(void)
 {
-	sem_controller(&data->forks, UNLINK, 0, data);
-	sem_controller(&data->s_nphilo_running, UNLINK, 0, data);
-	sem_controller(&data->s_dinner_starts, UNLINK, 0, data);
-	sem_controller(&data->s_dinner_ends, UNLINK, 0, data);
-	sem_controller(&data->s_print, UNLINK, 0, data);
-	sem_controller(&data->s_supervisor, UNLINK, 0, data);
-	sem_controller(&data->s_full_philos, UNLINK, 0, data);
+	sem_unlink(S_FORKS);
+	sem_unlink(S_NPHILO_RUNNING);
+	sem_unlink(S_DINNER_STARTS);
+	sem_unlink(S_DINNER_ENDS);
+	sem_unlink(S_PRINT);
+	sem_unlink(S_SUPERVISOR);
+	sem_unlink(S_FULL_PHILOS);
 }
 
 static void	destroy_sem(t_sem *sem, t_data *data)
