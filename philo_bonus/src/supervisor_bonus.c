@@ -6,7 +6,7 @@
 /*   By: sebasnadu <johnavar@student.42berlin.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 18:49:14 by sebasnadu         #+#    #+#             */
-/*   Updated: 2024/01/26 23:16:28 by sebasnadu        ###   ########.fr       */
+/*   Updated: 2024/01/26 23:50:33 by sebasnadu        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,6 @@ void	*supervisor(void *_data)
 		++i;
 	}
 	data->start_time = get_time(MILLISECONDS, data);
-	data->philos[i].last_meal_time = data->start_time;
 	i = 0;
 	while (i < data->nb_meals * data->nb_philo && !is_finished(data))
 	{
