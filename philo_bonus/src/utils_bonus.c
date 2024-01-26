@@ -6,7 +6,7 @@
 /*   By: sebasnadu <johnavar@student.42berlin.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 11:26:12 by sebasnadu         #+#    #+#             */
-/*   Updated: 2024/01/25 18:31:53 by sebasnadu        ###   ########.fr       */
+/*   Updated: 2024/01/26 23:29:18 by sebasnadu        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,6 @@ void	precise_usleep(long usec, t_data *data)
 	start = get_time(MICROSECONDS, data);
 	while (get_time(MICROSECONDS, data) - start < usec)
 	{
-		if (is_finished(data))
-			return ;
 		elapsed = get_time(MICROSECONDS, data) - start;
 		remaining = usec - elapsed;
 		if (remaining > 1e3)
@@ -64,10 +62,19 @@ void	*safe_malloc(size_t bytes, t_data *data)
 
 bool	is_finished(t_data *data)
 {
-	return (*(int *)data->s_dinner_ends.sem);
+	sem_controller(&data->s_dinner_ends, WAIT, 0, data);
+	if (data->is_ended)
+	{
+		sem_controller(&data->s_dinner_ends, POST, 0, data);
+		return (true);
+	}
+	sem_controller(&data->s_dinner_ends, POST, 0, data);
+	return (false);
 }
 
-bool	is_full(t_philo *philo)
+void	set_finished(t_data *data)
 {
-	return (philo->meals_eaten == philo->data->nb_meals);
+	sem_controller(&data->s_dinner_ends, WAIT, 0, data);
+	data->is_ended = true;
+	sem_controller(&data->s_dinner_ends, POST, 0, data);
 }

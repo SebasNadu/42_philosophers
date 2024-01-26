@@ -6,7 +6,7 @@
 /*   By: sebasnadu <johnavar@student.42berlin.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 19:52:19 by sebasnadu         #+#    #+#             */
-/*   Updated: 2024/01/25 18:43:06 by sebasnadu        ###   ########.fr       */
+/*   Updated: 2024/01/26 23:29:43 by sebasnadu        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,12 +36,11 @@
 # endif
 
 # define S_FORKS "/forks"
-# define S_NPHILO_RUNNING "/nphilo_running"
 # define S_SUPERVISOR "/supervisor"
 # define S_PRINT "/print"
 # define S_DINNER_STARTS "/dinner_starts"
 # define S_DINNER_ENDS "/dinner_ends"
-# define S_FULL_PHILOS "/full_philos"
+# define S_MEALS_EATEN "/meals_eaten"
 
 // Parser_bonus
 bool	parse_input(char **av, t_data *data);
@@ -56,6 +55,7 @@ void	error_handler(t_errcode err, bool is_exit, t_data *data);
 void	free_data(t_data *data);
 void	clean_sems(void);
 void	free_sems(t_data	*data);
+void	kill_processes(t_data *data);
 
 // Controllers_bonus
 void	process_controller(t_philo *philo, void (*function)(t_philo *));
@@ -67,6 +67,7 @@ void	threads_controller(pthread_t *thread, void *(*function)(void *),
 long	print_state(t_philo_state state, t_philo *philo);
 
 // Supervisor_bonus
+void	*philo_supervisor(void *_philo);
 void	*supervisor(void *_philo);
 
 // Dinner_bonus
@@ -74,15 +75,15 @@ void	alone_dinner(t_philo *philo);
 void	dinner(t_philo *philo);
 
 // States_bonus
-bool	philo_think(t_philo	*philo, bool is_the_entry);
-bool	philo_sleep(t_philo *philo);
-bool	philo_eat(t_philo *philo);
+void	philo_think(t_philo	*philo, bool is_the_entry);
+void	philo_sleep(t_philo *philo);
+void	philo_eat(t_philo *philo);
 
 // Utils_bonus
-bool	is_full(t_philo *philo);
-bool	is_finished(t_data *data);
 void	*safe_malloc(size_t bytes, t_data *data);
 void	precise_usleep(long usec, t_data *data);
 long	get_time(t_time_unit t_unit, t_data *data);
+bool	is_finished(t_data *data);
+void	set_finished(t_data *data);
 
 #endif

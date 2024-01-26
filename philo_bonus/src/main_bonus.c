@@ -6,23 +6,16 @@
 /*   By: sebasnadu <johnavar@student.42berlin.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 21:38:27 by sebasnadu         #+#    #+#             */
-/*   Updated: 2024/01/25 18:44:12 by sebasnadu        ###   ########.fr       */
+/*   Updated: 2024/01/26 23:31:02 by sebasnadu        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philo_bonus.h"
 
-static inline void	*print_ends(t_data *data)
-{
-	return (printf(MAG"%-6ld "RST"Every "YEL"Philosopher"RST" had ["CYN"%zu"RST
-			"] meals, all of them "GRN"survived"RST"!🎉🎉🎉\n",
-			get_time(MILLISECONDS, data) - data->start_time, data->nb_meals),
-		NULL);
-}
-
 void	dinner_controller(t_data *data)
 {
 	size_t	i;
+	int		status;
 
 	i = 0;
 	if (data->nb_philo == 1)
@@ -30,21 +23,20 @@ void	dinner_controller(t_data *data)
 	else
 	{
 		while (i < data->nb_philo)
-		{
-			process_controller(&data->philos[i], dinner);
-			++i;
-		}
+			process_controller(&data->philos[i++], dinner);
 	}
-	sem_controller(&data->s_dinner_starts, POST, 0, data);
-	data->start_time = get_time(MILLISECONDS, data);
+	threads_controller(&data->supervisor_id, supervisor, data, CREATE);
+	threads_controller(&data->supervisor_id, NULL, NULL, DETACH);
 	i = 0;
 	while (i < data->nb_philo)
 	{
-		waitpid(-1, NULL, 0);
+		waitpid(-1, &status, 0);
+		if (WIFEXITED(status) || WIFSIGNALED(status))
+			kill_processes(data);
 		++i;
 	}
-	if (*(size_t *)data->s_full_philos.sem == data->nb_philo)
-		print_ends(data);
+	set_finished(data);
+	sem_controller(&data->s_meals_eaten, POST, 0, data);
 }
 
 int	main(int ac, char **av)
@@ -55,9 +47,9 @@ int	main(int ac, char **av)
 	{
 		parse_input(av, &data);
 		init_data(&data);
-		// dinner_controller(&data);
-		// clean_sems(&data);
-		// free_sems(&data);
+		dinner_controller(&data);
+		free_sems(&data);
+		clean_sems();
 		free(data.philos);
 	}
 	else
