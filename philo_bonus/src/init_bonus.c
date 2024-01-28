@@ -6,7 +6,7 @@
 /*   By: sebasnadu <johnavar@student.42berlin.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 21:56:34 by sebasnadu         #+#    #+#             */
-/*   Updated: 2024/01/26 23:09:25 by sebasnadu        ###   ########.fr       */
+/*   Updated: 2024/01/28 19:45:40 by sebas_nadu       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,8 @@ void	init_data(t_data *data)
 	sem_controller(&data->forks, OPEN, data->nb_philo, data);
 	sem_controller(&data->s_supervisor, OPEN, 1, data);
 	sem_controller(&data->s_print, OPEN, 1, data);
-	sem_controller(&data->s_dinner_starts, 0, OPEN, data);
-	sem_controller(&data->s_dinner_ends, 1, OPEN, data);
-	sem_controller(&data->s_meals_eaten, 0, OPEN, data);
+	sem_controller(&data->s_dinner_starts, OPEN, 0, data);
+	sem_controller(&data->s_dinner_ends, OPEN, 1, data);
+	sem_controller(&data->s_meals_eaten, OPEN, 0, data);
 	init_philos(data);
 }

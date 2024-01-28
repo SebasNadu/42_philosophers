@@ -6,7 +6,7 @@
 /*   By: sebasnadu <johnavar@student.42berlin.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 09:33:36 by sebasnadu         #+#    #+#             */
-/*   Updated: 2024/01/26 23:31:18 by sebasnadu        ###   ########.fr       */
+/*   Updated: 2024/01/28 19:56:30 by sebas_nadu       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ static void	sem_error_handler(int error_code, t_data *data)
 {
 	if (error_code == 0)
 		return ;
-	if (error_code == -1 || error_code == *SEM_FAILED)
+	if (error_code == -1 || error_code == *(int *)SEM_FAILED)
 		error_code = errno;
 	else
 		return ;
@@ -76,7 +76,7 @@ void	sem_controller(t_sem *s_data, t_action act, size_t size, t_data *data)
 	{
 		s_data->sem = sem_open(s_data->path, O_CREAT, 0644, size);
 		if (s_data->sem == SEM_FAILED)
-			sem_error_handler(*s_data->sem, data);
+			sem_error_handler(*(int *)SEM_FAILED, data);
 		s_data->init = true;
 	}
 	else if (act == WAIT)
@@ -103,9 +103,10 @@ void	process_controller(t_philo *philo, void (*function)(t_philo *))
 		sem_controller(&philo->data->s_dinner_starts, WAIT, 0, philo->data);
 		philo->data->start_time = get_time(MILLISECONDS, philo->data);
 		philo->last_meal_time = philo->data->start_time;
-		threads_controller(&philo->data->philo_supervisor_id, philo_supervisor, philo,
-			CREATE);
-		threads_controller(&philo->data->philo_supervisor_id, NULL, NULL, DETACH);
+		threads_controller(&philo->data->philo_supervisor_id, philo_supervisor,
+			philo, CREATE);
+		threads_controller(&philo->data->philo_supervisor_id, NULL, NULL,
+			DETACH);
 		function(philo);
 		free_sems(philo->data);
 		free(philo);
