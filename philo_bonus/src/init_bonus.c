@@ -6,7 +6,7 @@
 /*   By: sebasnadu <johnavar@student.42berlin.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 21:56:34 by sebasnadu         #+#    #+#             */
-/*   Updated: 2024/01/29 19:54:33 by sebasnadu        ###   ########.fr       */
+/*   Updated: 2024/01/29 20:10:01 by sebas_nadu       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ static void	init_philos(t_data *data)
 void	init_data(t_data *data)
 {
 	clean_sems();
-	data->is_ended = false;
+	// data->is_ended = false;
 	data->forks.init = false;
 	data->forks.path = S_FORKS;
 	data->s_supervisor.init = false;

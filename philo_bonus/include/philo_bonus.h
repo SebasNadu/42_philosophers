@@ -6,7 +6,7 @@
 /*   By: sebasnadu <johnavar@student.42berlin.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 19:52:19 by sebasnadu         #+#    #+#             */
-/*   Updated: 2024/01/29 19:54:04 by sebasnadu        ###   ########.fr       */
+/*   Updated: 2024/01/29 20:10:46 by sebas_nadu       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@
 # define S_DINNER_STARTS "/dinner_starts"
 # define S_DINNER_ENDS "/dinner_ends"
 # define S_MEALS_EATEN "/meals_eaten"
-# define S_NB_PHILOS "/nb_philos"
+# define S_NB_PHILO "/nb_philo"
 # define S_IS_ENDED "/is_ended"
 
 // Parser_bonus
@@ -85,7 +85,7 @@ void	philo_eat(t_philo *philo);
 void	*safe_malloc(size_t bytes, t_data *data);
 void	precise_usleep(long usec, t_data *data);
 long	get_time(t_time_unit t_unit, t_data *data);
-bool	is_finished(t_data *data);
-void	set_finished(t_data *data);
+// bool	is_finished(t_data *data);
+// void	set_finished(t_data *data);
 
 #endif

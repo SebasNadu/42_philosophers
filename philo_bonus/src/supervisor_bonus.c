@@ -6,7 +6,7 @@
 /*   By: sebasnadu <johnavar@student.42berlin.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 18:49:14 by sebasnadu         #+#    #+#             */
-/*   Updated: 2024/01/29 20:03:04 by sebasnadu        ###   ########.fr       */
+/*   Updated: 2024/01/29 20:11:31 by sebas_nadu       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ void	*supervisor(void *_data)
 	// 	sem_controller(&data->s_dinner_starts, POST, 0, data);
 	// 	++i;
 	// }
-	sem_controller(&philo->data->s_dinner_starts, POST, 0, philo->data);
+	sem_controller(&data->s_dinner_starts, POST, 0, data);
 	data->start_time = get_time(MILLISECONDS, data);
 	i = 0;
 	while (i < data->nb_meals * data->nb_philo && !*(int *)data->s_is_ended.sem)

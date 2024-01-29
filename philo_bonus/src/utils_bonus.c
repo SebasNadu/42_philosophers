@@ -6,7 +6,7 @@
 /*   By: sebasnadu <johnavar@student.42berlin.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 11:26:12 by sebasnadu         #+#    #+#             */
-/*   Updated: 2024/01/26 23:29:18 by sebasnadu        ###   ########.fr       */
+/*   Updated: 2024/01/29 20:08:40 by sebas_nadu       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ void	*safe_malloc(size_t bytes, t_data *data)
 		memset(mem, 0, bytes);
 	return (mem);
 }
-
+/*
 bool	is_finished(t_data *data)
 {
 	sem_controller(&data->s_dinner_ends, WAIT, 0, data);
@@ -77,4 +77,4 @@ void	set_finished(t_data *data)
 	sem_controller(&data->s_dinner_ends, WAIT, 0, data);
 	data->is_ended = true;
 	sem_controller(&data->s_dinner_ends, POST, 0, data);
-}
+} */

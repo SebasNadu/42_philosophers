@@ -6,7 +6,7 @@
 /*   By: sebasnadu <johnavar@student.42berlin.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/25 13:43:37 by sebasnadu         #+#    #+#             */
-/*   Updated: 2024/01/29 19:53:54 by sebasnadu        ###   ########.fr       */
+/*   Updated: 2024/01/29 20:09:24 by sebas_nadu       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,7 @@ struct s_data
 	t_sem		s_meals_eaten;
 	t_sem		s_dinner_ends;
 	t_sem		s_nb_philo;
-	t_sem		is_ended;
+	t_sem		s_is_ended;
 };
 
 #endif
