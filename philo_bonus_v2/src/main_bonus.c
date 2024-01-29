@@ -6,7 +6,7 @@
 /*   By: sebasnadu <johnavar@student.42berlin.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 21:38:27 by sebasnadu         #+#    #+#             */
-/*   Updated: 2024/01/29 20:04:04 by sebasnadu        ###   ########.fr       */
+/*   Updated: 2024/01/28 19:47:22 by sebas_nadu       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,7 @@ void	dinner_controller(t_data *data)
 			kill_processes(data);
 		++i;
 	}
-	// set_finished(data);
-	sem_controller(&data->s_is_ended, POST, 0, data);
+	set_finished(data);
 	sem_controller(&data->s_meals_eaten, POST, 0, data);
 }
 

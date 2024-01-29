@@ -6,7 +6,7 @@
 /*   By: sebasnadu <johnavar@student.42berlin.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 19:52:19 by sebasnadu         #+#    #+#             */
-/*   Updated: 2024/01/29 19:54:04 by sebasnadu        ###   ########.fr       */
+/*   Updated: 2024/01/26 23:29:43 by sebasnadu        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,6 @@
 # define S_DINNER_STARTS "/dinner_starts"
 # define S_DINNER_ENDS "/dinner_ends"
 # define S_MEALS_EATEN "/meals_eaten"
-# define S_NB_PHILOS "/nb_philos"
-# define S_IS_ENDED "/is_ended"
 
 // Parser_bonus
 bool	parse_input(char **av, t_data *data);

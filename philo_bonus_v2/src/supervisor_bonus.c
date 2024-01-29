@@ -6,7 +6,7 @@
 /*   By: sebasnadu <johnavar@student.42berlin.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 18:49:14 by sebasnadu         #+#    #+#             */
-/*   Updated: 2024/01/29 20:03:04 by sebasnadu        ###   ########.fr       */
+/*   Updated: 2024/01/26 23:50:33 by sebasnadu        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,16 +37,13 @@ void	*philo_supervisor(void *_philo)
 	t_philo	*philo;
 
 	philo = (t_philo *)_philo;
-	while (*(int *)philo->data->s_nb_philo.sem)
-		;
 	while (true)
 	{
 		sem_controller(&philo->data->s_supervisor, WAIT, 0, philo->data);
 		if (!philo_status(philo))
 		{
 			print_state(DIED, philo);
-			// philo->is_dead = true;
-			sem_controller(&philo->data->s_is_ended, POST, 0, philo->data);
+			philo->is_dead = true;
 			sem_controller(&philo->data->s_supervisor, POST, 0, philo->data);
 			sem_controller(&philo->data->s_print, WAIT, 0, philo->data);
 			exit(EXIT_SUCCESS);
@@ -63,21 +60,20 @@ void	*supervisor(void *_data)
 
 	data = (t_data *)_data;
 	i = 0;
-	// precise_usleep(1e3, data);
-	// while (i < data->nb_philo)
-	// {
-	// 	sem_controller(&data->s_dinner_starts, POST, 0, data);
-	// 	++i;
-	// }
-	sem_controller(&philo->data->s_dinner_starts, POST, 0, philo->data);
+	precise_usleep(1e3, data);
+	while (i < data->nb_philo)
+	{
+		sem_controller(&data->s_dinner_starts, POST, 0, data);
+		++i;
+	}
 	data->start_time = get_time(MILLISECONDS, data);
 	i = 0;
-	while (i < data->nb_meals * data->nb_philo && !*(int *)data->s_is_ended.sem)
+	while (i < data->nb_meals * data->nb_philo && !is_finished(data))
 	{
 		sem_controller(&data->s_meals_eaten, WAIT, 0, data);
 		++i;
 	}
-	if (*(int *)data->s_is_ended.sem)
+	if (is_finished(data))
 		return (NULL);
 	print_ends(data);
 	sem_controller(&data->s_print, WAIT, 0, data);

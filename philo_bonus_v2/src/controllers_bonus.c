@@ -6,7 +6,7 @@
 /*   By: sebasnadu <johnavar@student.42berlin.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 09:33:36 by sebasnadu         #+#    #+#             */
-/*   Updated: 2024/01/29 19:27:00 by sebasnadu        ###   ########.fr       */
+/*   Updated: 2024/01/28 19:56:30 by sebas_nadu       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,8 +100,7 @@ void	process_controller(t_philo *philo, void (*function)(t_philo *))
 		error_handler(FORK_FAIL, true, philo->data);
 	if (philo->pid == 0)
 	{
-		while (!*(int *)philo->data->s_dinner_starts.sem)
-			;
+		sem_controller(&philo->data->s_dinner_starts, WAIT, 0, philo->data);
 		philo->data->start_time = get_time(MILLISECONDS, philo->data);
 		philo->last_meal_time = philo->data->start_time;
 		threads_controller(&philo->data->philo_supervisor_id, philo_supervisor,
