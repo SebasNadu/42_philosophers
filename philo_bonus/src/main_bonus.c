@@ -6,7 +6,7 @@
 /*   By: sebasnadu <johnavar@student.42berlin.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 21:38:27 by sebasnadu         #+#    #+#             */
-/*   Updated: 2024/01/29 20:09:39 by sebas_nadu       ###   ########.fr       */
+/*   Updated: 2024/01/30 20:58:00 by sebasnadu        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ void	dinner_controller(t_data *data)
 	int		status;
 
 	i = 0;
+	data->start_time = get_time(MILLISECONDS, data);
 	if (data->nb_philo == 1)
 		process_controller(&data->philos[0], alone_dinner);
 	else
@@ -25,19 +26,22 @@ void	dinner_controller(t_data *data)
 		while (i < data->nb_philo)
 			process_controller(&data->philos[i++], dinner);
 	}
-	threads_controller(&data->supervisor_id, supervisor, data, CREATE);
-	threads_controller(&data->supervisor_id, NULL, NULL, DETACH);
+	// threads_controller(&data->supervisor_id, supervisor, data, CREATE);
+	// threads_controller(&data->supervisor_id, NULL, NULL, DETACH);
+	// sem_controller(&data->s_is_ended, WAIT, 0, data);
+	// sem_controller(&data->s_is_ended, POST, 0, data);
 	i = 0;
 	while (i < data->nb_philo)
 	{
 		waitpid(-1, &status, 0);
-		if (WIFEXITED(status) || WIFSIGNALED(status))
+		// if (WIFEXITED(status) || WIFSIGNALED(status))
+		if (status != 0)
 			kill_processes(data);
 		++i;
 	}
 	// set_finished(data);
-	sem_controller(&data->s_is_ended, POST, 0, data);
-	sem_controller(&data->s_meals_eaten, POST, 0, data);
+	// sem_controller(&data->s_is_ended, POST, 0, data);
+	// sem_controller(&data->s_meals_eaten, POST, 0, data);
 }
 
 int	main(int ac, char **av)

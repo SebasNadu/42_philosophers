@@ -6,7 +6,7 @@
 /*   By: sebasnadu <johnavar@student.42berlin.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 19:52:19 by sebasnadu         #+#    #+#             */
-/*   Updated: 2024/01/29 20:10:46 by sebas_nadu       ###   ########.fr       */
+/*   Updated: 2024/01/30 17:24:44 by sebasnadu        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,9 +40,8 @@
 # define S_PRINT "/print"
 # define S_DINNER_STARTS "/dinner_starts"
 # define S_DINNER_ENDS "/dinner_ends"
-# define S_MEALS_EATEN "/meals_eaten"
-# define S_NB_PHILO "/nb_philo"
 # define S_IS_ENDED "/is_ended"
+# define S_MEALS_EATEN "/meals_eaten"
 
 // Parser_bonus
 bool	parse_input(char **av, t_data *data);
@@ -59,7 +58,6 @@ void	clean_sems(void);
 void	free_sems(t_data	*data);
 void	kill_processes(t_data *data);
 
-// Controllers_bonus
 void	process_controller(t_philo *philo, void (*function)(t_philo *));
 void	sem_controller(t_sem *s_data, t_action act, size_t size, t_data *data);
 void	threads_controller(pthread_t *thread, void *(*function)(void *),

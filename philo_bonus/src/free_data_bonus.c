@@ -6,7 +6,7 @@
 /*   By: sebasnadu <johnavar@student.42berlin.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 12:21:24 by sebasnadu         #+#    #+#             */
-/*   Updated: 2024/01/26 21:31:34 by sebasnadu        ###   ########.fr       */
+/*   Updated: 2024/01/30 17:25:24 by sebasnadu        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	free_sems(t_data	*data)
 	sem_controller(&data->s_dinner_ends, CLOSE, 0, data);
 	sem_controller(&data->s_print, CLOSE, 0, data);
 	sem_controller(&data->s_supervisor, CLOSE, 0, data);
-	sem_controller(&data->s_meals_eaten, CLOSE, 0, data);
+	// sem_controller(&data->s_meals_eaten, CLOSE, 0, data);
 }
 
 void	clean_sems(void)

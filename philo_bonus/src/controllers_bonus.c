@@ -6,7 +6,7 @@
 /*   By: sebasnadu <johnavar@student.42berlin.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 09:33:36 by sebasnadu         #+#    #+#             */
-/*   Updated: 2024/01/29 19:27:00 by sebasnadu        ###   ########.fr       */
+/*   Updated: 2024/01/30 21:14:46 by sebasnadu        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,17 +100,19 @@ void	process_controller(t_philo *philo, void (*function)(t_philo *))
 		error_handler(FORK_FAIL, true, philo->data);
 	if (philo->pid == 0)
 	{
-		while (!*(int *)philo->data->s_dinner_starts.sem)
-			;
-		philo->data->start_time = get_time(MILLISECONDS, philo->data);
-		philo->last_meal_time = philo->data->start_time;
+		// while (!*(int *)philo->data->s_dinner_starts.sem)
+		// 	;
+		// philo->data->start_time = get_time(MILLISECONDS, philo->data);
+		philo->last_meal_time = get_time(MILLISECONDS, philo->data);
+		philo->data->current_meals = 0;
 		threads_controller(&philo->data->philo_supervisor_id, philo_supervisor,
 			philo, CREATE);
-		threads_controller(&philo->data->philo_supervisor_id, NULL, NULL,
-			DETACH);
+		// threads_controller(&philo->data->philo_supervisor_id, NULL, NULL,
+		// 	DETACH);
 		function(philo);
-		free_sems(philo->data);
-		free(philo);
+		// free_sems(philo->data);
+		// free(philo);
 		exit(EXIT_SUCCESS);
+		// return ;
 	}
 }

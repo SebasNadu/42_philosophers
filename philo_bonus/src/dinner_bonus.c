@@ -6,7 +6,7 @@
 /*   By: sebasnadu <johnavar@student.42berlin.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 17:21:14 by sebasnadu         #+#    #+#             */
-/*   Updated: 2024/01/29 20:01:00 by sebasnadu        ###   ########.fr       */
+/*   Updated: 2024/01/30 21:08:45 by sebasnadu        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,13 +28,16 @@ static void	dinner_entry(t_philo *philo)
 
 void	dinner(t_philo *philo)
 {
-	sem_controller(&philo->data->s_nb_philo, POST, 0, philo->data);
-	while (*(int *)philo->data->s_nb_philo.sem)
-		;
+	// sem_controller(&philo->data->s_nb_philo, POST, 0, philo->data);
+	// while (*(int *)philo->data->s_nb_philo.sem)
+	// 	;
 	dinner_entry(philo);
-	while (*(int *)philo->data->s_nb_philo.sem)
+	// while (*(int *)philo->data->s_nb_philo.sem)
+	while (true)
 	{
 		philo_eat(philo);
+		if (philo->data->nb_meals == philo->data->current_meals)
+			exit(EXIT_SUCCESS);
 		philo_sleep(philo);
 		philo_think(philo, false);
 	}

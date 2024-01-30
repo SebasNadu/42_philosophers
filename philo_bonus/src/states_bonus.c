@@ -6,7 +6,7 @@
 /*   By: sebasnadu <johnavar@student.42berlin.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/25 10:33:45 by sebasnadu         #+#    #+#             */
-/*   Updated: 2024/01/26 21:19:45 by sebasnadu        ###   ########.fr       */
+/*   Updated: 2024/01/30 21:07:43 by sebasnadu        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,10 +31,12 @@ static void	drop_forks(t_philo *philo)
 void	philo_eat(t_philo *philo)
 {
 	take_forks(philo);
-	sem_controller(&philo->data->s_supervisor, WAIT, 0, philo->data);
-	philo->last_meal_time = print_state(EATING, philo);
-	sem_controller(&philo->data->s_meals_eaten, POST, 0, philo->data);
-	sem_controller(&philo->data->s_supervisor, POST, 0, philo->data);
+	print_state(EATING, philo);
+	// sem_controller(&philo->data->s_supervisor, WAIT, 0, philo->data);
+	philo->last_meal_time = get_time(MILLISECONDS, philo->data);
+	philo->data->current_meals++;
+	// sem_controller(&philo->data->s_meals_eaten, POST, 0, philo->data);
+	// sem_controller(&philo->data->s_supervisor, POST, 0, philo->data);
 	precise_usleep(philo->data->time_to_eat, philo->data);
 	drop_forks(philo);
 }
