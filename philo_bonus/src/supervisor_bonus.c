@@ -6,7 +6,7 @@
 /*   By: sebasnadu <johnavar@student.42berlin.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 18:49:14 by sebasnadu         #+#    #+#             */
-/*   Updated: 2024/01/30 21:13:35 by sebasnadu        ###   ########.fr       */
+/*   Updated: 2024/01/31 15:00:35 by johnavar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,16 +39,30 @@ void	*philo_supervisor(void *_philo)
 	philo = (t_philo *)_philo;
 	while (true)
 	{
+		precise_usleep(100, philo->data);
+		sem_controller(&philo->data->s_dinner_ends, WAIT, 0, philo->data);
+		if (philo->is_dead == true)
+		{
+			sem_controller(&philo->data->s_dinner_ends, POST, 0, philo->data);
+			return (NULL);
+		}
+		sem_controller(&philo->data->s_dinner_ends, POST, 0, philo->data);
 		sem_controller(&philo->data->s_supervisor, WAIT, 0, philo->data);
 		if (!philo_status(philo))
 		{
 			print_state(DIED, philo);
-			// sem_controller(&philo->data->s_is_ended, POST, 0, philo->data);
-			// sem_controller(&philo->data->s_print, WAIT, 0, philo->data);
+			sem_controller(&philo->data->s_dinner_ends, WAIT, 0, philo->data);
+			philo->is_dead = true;
+			sem_controller(&philo->data->s_dinner_ends, POST, 0, philo->data);
+			/*sem_controller(&philo->data->s_is_ended, POST, 0, philo->data);*/
+			sem_controller(&philo->data->s_print, WAIT, 0, philo->data);
+			sem_controller(&philo->data->s_supervisor, POST, 0, philo->data);
+			/*return (NULL);*/
+			/*free_sems(philo->data);*/
+			/*free(philo->data->philos);*/
 			exit(1);
 		}
 		sem_controller(&philo->data->s_supervisor, POST, 0, philo->data);
-		precise_usleep(100, philo->data);
 		// sem_controller(&philo->data->s_dinner_ends, WAIT, 0, philo->data);
 		// if (philo->data->current_meals >= philo->data->total_meals)
 		// {

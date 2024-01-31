@@ -6,7 +6,7 @@
 /*   By: sebasnadu <johnavar@student.42berlin.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 19:52:19 by sebasnadu         #+#    #+#             */
-/*   Updated: 2024/01/30 17:24:44 by sebasnadu        ###   ########.fr       */
+/*   Updated: 2024/01/31 14:40:28 by johnavar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ void	clean_sems(void);
 void	free_sems(t_data	*data);
 void	kill_processes(t_data *data);
 
-void	process_controller(t_philo *philo, void (*function)(t_philo *));
+void	process_controller(t_philo *philo, int (*function)(t_philo *));
 void	sem_controller(t_sem *s_data, t_action act, size_t size, t_data *data);
 void	threads_controller(pthread_t *thread, void *(*function)(void *),
 			void *args, t_action action);
@@ -71,13 +71,13 @@ void	*philo_supervisor(void *_philo);
 void	*supervisor(void *_philo);
 
 // Dinner_bonus
-void	alone_dinner(t_philo *philo);
-void	dinner(t_philo *philo);
+int		alone_dinner(t_philo *philo);
+int		dinner(t_philo *philo);
 
 // States_bonus
-void	philo_think(t_philo	*philo, bool is_the_entry);
-void	philo_sleep(t_philo *philo);
-void	philo_eat(t_philo *philo);
+bool	philo_think(t_philo	*philo, bool is_the_entry);
+bool	philo_sleep(t_philo *philo);
+bool	philo_eat(t_philo *philo);
 
 // Utils_bonus
 void	*safe_malloc(size_t bytes, t_data *data);

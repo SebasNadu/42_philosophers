@@ -6,7 +6,7 @@
 /*   By: sebasnadu <johnavar@student.42berlin.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 09:33:36 by sebasnadu         #+#    #+#             */
-/*   Updated: 2024/01/30 21:14:46 by sebasnadu        ###   ########.fr       */
+/*   Updated: 2024/01/31 14:47:02 by johnavar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ static void	sem_error_handler(int error_code, t_data *data)
 {
 	if (error_code == 0)
 		return ;
-	if (error_code == -1 || error_code == *(int *)SEM_FAILED)
+	if (error_code == -1 || SEM_FAILED)
 		error_code = errno;
 	else
 		return ;
@@ -76,7 +76,7 @@ void	sem_controller(t_sem *s_data, t_action act, size_t size, t_data *data)
 	{
 		s_data->sem = sem_open(s_data->path, O_CREAT, 0644, size);
 		if (s_data->sem == SEM_FAILED)
-			sem_error_handler(*(int *)SEM_FAILED, data);
+			sem_error_handler(errno, data);
 		s_data->init = true;
 	}
 	else if (act == WAIT)
@@ -93,26 +93,35 @@ void	sem_controller(t_sem *s_data, t_action act, size_t size, t_data *data)
 		s_data->init = false;
 }
 
-void	process_controller(t_philo *philo, void (*function)(t_philo *))
+void	process_controller(t_philo *philo, int (*function)(t_philo *))
 {
+	int	exit_value;
+
+	exit_value = 0;
 	philo->pid = fork();
 	if (philo->pid == -1)
 		error_handler(FORK_FAIL, true, philo->data);
 	if (philo->pid == 0)
 	{
-		// while (!*(int *)philo->data->s_dinner_starts.sem)
-		// 	;
-		// philo->data->start_time = get_time(MILLISECONDS, philo->data);
 		philo->last_meal_time = get_time(MILLISECONDS, philo->data);
 		philo->data->current_meals = 0;
 		threads_controller(&philo->data->philo_supervisor_id, philo_supervisor,
 			philo, CREATE);
-		// threads_controller(&philo->data->philo_supervisor_id, NULL, NULL,
-		// 	DETACH);
-		function(philo);
-		// free_sems(philo->data);
-		// free(philo);
-		exit(EXIT_SUCCESS);
-		// return ;
+		/*threads_controller(&philo->data->philo_supervisor_id, NULL, NULL,*/
+			/*DETACH);*/
+		exit_value = function(philo);
+		threads_controller(&philo->data->philo_supervisor_id, NULL, NULL, JOIN);
+		if (exit_value == 1)
+		{
+			free_sems(philo->data);
+			free(philo->data->philos);
+			exit(1);
+		}
+		else
+		{
+			free_sems(philo->data);
+			free(philo->data->philos);
+			exit(0);
+		}
 	}
 }

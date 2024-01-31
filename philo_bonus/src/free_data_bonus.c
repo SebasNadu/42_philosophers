@@ -6,7 +6,7 @@
 /*   By: sebasnadu <johnavar@student.42berlin.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 12:21:24 by sebasnadu         #+#    #+#             */
-/*   Updated: 2024/01/30 17:25:24 by sebasnadu        ###   ########.fr       */
+/*   Updated: 2024/01/31 13:33:46 by johnavar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void	clean_sems(void)
 	sem_unlink(S_DINNER_ENDS);
 	sem_unlink(S_PRINT);
 	sem_unlink(S_SUPERVISOR);
-	sem_unlink(S_MEALS_EATEN);
+	/*sem_unlink(S_MEALS_EATEN);*/
 }
 
 static void	destroy_sem(t_sem *sem, t_data *data)
@@ -62,8 +62,8 @@ void	free_data(t_data *data)
 		destroy_sem(&data->s_print, data);
 	if (data->s_supervisor.init)
 		destroy_sem(&data->s_supervisor, data);
-	if (data->s_meals_eaten.init)
-		destroy_sem(&data->s_meals_eaten, data);
+	/*if (data->s_meals_eaten.init)*/
+		/*destroy_sem(&data->s_meals_eaten, data);*/
 	while (++i < (int)data->nb_philo && data->philos)
 	{
 		if (data->philos[i].pid > 0)

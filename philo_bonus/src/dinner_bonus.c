@@ -6,7 +6,7 @@
 /*   By: sebasnadu <johnavar@student.42berlin.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 17:21:14 by sebasnadu         #+#    #+#             */
-/*   Updated: 2024/01/30 21:08:45 by sebasnadu        ###   ########.fr       */
+/*   Updated: 2024/01/31 14:38:41 by johnavar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ static void	dinner_entry(t_philo *philo)
 	}
 }
 
-void	dinner(t_philo *philo)
+int	dinner(t_philo *philo)
 {
 	// sem_controller(&philo->data->s_nb_philo, POST, 0, philo->data);
 	// while (*(int *)philo->data->s_nb_philo.sem)
@@ -35,17 +35,27 @@ void	dinner(t_philo *philo)
 	// while (*(int *)philo->data->s_nb_philo.sem)
 	while (true)
 	{
-		philo_eat(philo);
+		if (!philo_eat(philo))
+			return (1);
 		if (philo->data->nb_meals == philo->data->current_meals)
-			exit(EXIT_SUCCESS);
-		philo_sleep(philo);
-		philo_think(philo, false);
+		{
+			sem_controller(&philo->data->s_dinner_ends, WAIT, 0, philo->data);
+			philo->is_dead = true;
+			sem_controller(&philo->data->s_dinner_ends, POST, 0, philo->data);
+			return (0);
+		}
+		if (!philo_sleep(philo))
+			return (1);
+		/*if (philo->is_dead == true)*/
+			/*return ;*/
+		if (!philo_think(philo, false))
+			return (1);
 	}
 }
 
-void	alone_dinner(t_philo *philo)
+int	alone_dinner(t_philo *philo)
 {
 	print_state(T_RFORK, philo);
 	precise_usleep(philo->data->time_to_die, philo->data);
-	return ;
+	return (0);
 }
