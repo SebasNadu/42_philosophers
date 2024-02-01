@@ -6,7 +6,7 @@
 /*   By: sebasnadu <johnavar@student.42berlin.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 21:38:27 by sebasnadu         #+#    #+#             */
-/*   Updated: 2024/01/31 12:29:19 by johnavar         ###   ########.fr       */
+/*   Updated: 2024/02/01 10:39:38 by johnavar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,22 +26,14 @@ void	dinner_controller(t_data *data)
 		while (i < data->nb_philo)
 			process_controller(&data->philos[i++], dinner);
 	}
-	// threads_controller(&data->supervisor_id, supervisor, data, CREATE);
-	// threads_controller(&data->supervisor_id, NULL, NULL, DETACH);
-	// sem_controller(&data->s_is_ended, WAIT, 0, data);
-	// sem_controller(&data->s_is_ended, POST, 0, data);
 	i = 0;
 	while (i < data->nb_philo)
 	{
 		waitpid(-1, &status, 0);
-		// if (WIFEXITED(status) || WIFSIGNALED(status))
 		if (status != 0)
 			kill_processes(data);
 		++i;
 	}
-	// set_finished(data);
-	// sem_controller(&data->s_is_ended, POST, 0, data);
-	// sem_controller(&data->s_meals_eaten, POST, 0, data);
 }
 
 int	main(int ac, char **av)

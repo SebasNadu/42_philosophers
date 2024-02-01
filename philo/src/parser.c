@@ -6,7 +6,7 @@
 /*   By: sebasnadu <johnavar@student.42berlin.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 10:53:27 by sebasnadu         #+#    #+#             */
-/*   Updated: 2024/01/20 15:15:59 by sebasnadu        ###   ########.fr       */
+/*   Updated: 2024/02/01 11:00:17 by johnavar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ static long	ft_atol(const char *str)
 
 bool	parse_input(char **av, t_data *data)
 {
-	data->nb_philo = (short)ft_atol(av[1]);
+	data->nb_philo = (size_t)ft_atol(av[1]);
 	data->time_to_die = ft_atol(av[2]) * 1e3;
 	data->time_to_eat = ft_atol(av[3]) * 1e3;
 	data->time_to_sleep = ft_atol(av[4]) * 1e3;
@@ -67,9 +67,9 @@ bool	parse_input(char **av, t_data *data)
 		|| data->time_to_sleep < 6e4)
 		error_handler(TOO_SMALL, true, NULL);
 	if (av[5])
-		data->nb_meals = (short)ft_atol(av[5]);
+		data->nb_meals = (size_t)ft_atol(av[5]);
 	else
-		data->nb_meals = -1;
+		data->nb_meals = INT_MAX;
 	if (data->nb_philo == 0 || data->nb_meals == 0)
 		error_handler(ZERO_ERR, true, NULL);
 	return (true);

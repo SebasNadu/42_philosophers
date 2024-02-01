@@ -6,7 +6,7 @@
 #    By: sebasnadu <johnavar@student.42berlin.de>   +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/17 20:42:24 by sebasnadu         #+#    #+#              #
-#    Updated: 2024/01/23 19:55:52 by sebasnadu        ###   ########.fr        #
+#    Updated: 2024/02/01 14:57:32 by johnavar         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -54,11 +54,11 @@ OBJECTS				:= $(addprefix $(OBJ_DIR)/, $(SOURCE:.c=.o))
 ################################################################################
 
 ifeq ($(DEBUG_MODE), 1)
-	CFLAGS			:= -Wall -Wextra -Werror -g3 -O3 -fsanitize=address
+	CFLAGS			:= -Wall -Wextra -Werror -fsanitize=address
 else ifeq ($(DEBUG_MODE), 2)
-	CFLAGS			:= -Wall -Wextra -Werror -g3 -O3 -fsanitize=thread
+	CFLAGS			:= -Wall -Wextra -Werror -fsanitize=thread
 else
-	CFLAGS			:= -Wall -Wextra -Werror -O3
+	CFLAGS			:= -Wall -Wextra -Werror
 endif
 
 PFLAGS				:= -pthread
@@ -75,10 +75,10 @@ endif
 
 SRC_WORD_COUNT		:= $(shell echo -n $(SOURCE) | wc -w)
 OBJ_FILE_COUNT		:= $(shell ls -l $(OBJ_DIR) 2>&1 | grep ".o" | wc -l)
-SRC_COUNT_TOT		:= $(shell expr $(SRC_WORD_COUNT) - $(OBJ_FILE_COUNT) - 1)
+SRC_COUNT_TOT		:= $(shell expr $(SRC_WORD_COUNT) - $(OBJ_FILE_COUNT))
 
 ifeq ($(shell test $(SRC_COUNT_TOT) -le 0; echo $$?), 0)
-	SRC_COUNT_TOT	:= $(shell expr $(shell echo -n $(SOURCE) | wc -w) - 1)
+	SRC_COUNT_TOT	:= $(shell expr $(shell echo -n $(SOURCE) | wc -w))
 endif
 
 SRC_COUNT			= 0
@@ -94,7 +94,7 @@ all:			$(NAME)
 $(NAME):		$(OBJECTS)
 	@printf "$(MAGENTA)[$(NAME)] $(DEFAULT)Linking "
 	@printf "($(BLUE)$(NAME)$(DEFAULT))...\n"
-	@$(CC) $(CFLAGS) $(PFLAGS) $(INCLUDES) $^ -o $@
+	@$(CC) $(CFLAGS) -O3 $(PFLAGS) $(INCLUDES) $^ -o $@
 	@printf "\r%100s\r$(MAGENTA)[$(NAME)] $(GREEN)Compilation success "
 	@printf "🎉!$(DEFAULT)\n"
 
@@ -121,15 +121,5 @@ fclean:			clean
 	@$(RM) $(NAME)
 
 re:				fclean all
-
-# drd: $(NAME)
-# 	valgrind --tool=drd ./$(EXECUTABLE) 5 800 200 200 5
-
-# hell: $(NAME)
-# 	valgrind --tool=helgrind ./$(EXECUTABLE) 5 800 200 200 5
-
-# check: $(NAME)
-# 	valgrind -q --leak-check=full --show-leak-kinds=all \
-# 		--track-origins=yes ./$(EXECUTABLE) 5 800 200 200 5
 
 .PHONY:			all clean fclean re

@@ -6,125 +6,54 @@
 /*   By: sebasnadu <johnavar@student.42berlin.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 18:49:14 by sebasnadu         #+#    #+#             */
-/*   Updated: 2024/01/31 15:00:35 by johnavar         ###   ########.fr       */
+/*   Updated: 2024/02/01 14:53:25 by johnavar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philo_bonus.h"
-
-static inline void	*print_ends(t_data *data)
-{
-	return (printf(MAG"%-6ld "RST"Every "YEL"Philosopher"RST" had ["CYN"%zu"RST
-			"] meals, all of them "GRN"survived"RST"!🎉🎉🎉\n",
-			get_time(MILLISECONDS, data) - data->start_time, data->nb_meals),
-		NULL);
-}
 
 static bool	philo_status(t_philo *philo)
 {
 	long	elapsed;
 	long	tt_die_ms;
 
+	sem_controller(&philo->data->s_supervisor, WAIT, 0, philo->data);
 	elapsed = get_time(MILLISECONDS, philo->data) - philo->last_meal_time;
 	tt_die_ms = philo->data->time_to_die / 1e3;
 	if (elapsed >= tt_die_ms)
+	{
+		sem_controller(&philo->data->s_supervisor, POST, 0, philo->data);
+		set_is_ended(true, philo);
 		return (false);
+	}
+	sem_controller(&philo->data->s_supervisor, POST, 0, philo->data);
 	return (true);
 }
 
 void	*philo_supervisor(void *_philo)
 {
 	t_philo	*philo;
+	long	elap;
 
 	philo = (t_philo *)_philo;
+	elap = 0;
 	while (true)
 	{
 		precise_usleep(100, philo->data);
-		sem_controller(&philo->data->s_dinner_ends, WAIT, 0, philo->data);
-		if (philo->is_dead == true)
-		{
-			sem_controller(&philo->data->s_dinner_ends, POST, 0, philo->data);
+		if (get_is_ended(philo))
 			return (NULL);
-		}
-		sem_controller(&philo->data->s_dinner_ends, POST, 0, philo->data);
-		sem_controller(&philo->data->s_supervisor, WAIT, 0, philo->data);
 		if (!philo_status(philo))
 		{
-			print_state(DIED, philo);
-			sem_controller(&philo->data->s_dinner_ends, WAIT, 0, philo->data);
-			philo->is_dead = true;
-			sem_controller(&philo->data->s_dinner_ends, POST, 0, philo->data);
-			/*sem_controller(&philo->data->s_is_ended, POST, 0, philo->data);*/
+			elap = get_time(MILLISECONDS, philo->data)
+				- philo->data->start_time;
 			sem_controller(&philo->data->s_print, WAIT, 0, philo->data);
-			sem_controller(&philo->data->s_supervisor, POST, 0, philo->data);
-			/*return (NULL);*/
-			/*free_sems(philo->data);*/
-			/*free(philo->data->philos);*/
+			if (DEBUG_MODE)
+				printf(MAG"%-6ld "RST"["CYN"%zu"RST"] 💀💀Died💀💀\n",
+					elap, philo->id);
+			else
+				printf("%-6ld "CYN"%zu"RST" died\n", elap, philo->id);
 			exit(1);
 		}
-		sem_controller(&philo->data->s_supervisor, POST, 0, philo->data);
-		// sem_controller(&philo->data->s_dinner_ends, WAIT, 0, philo->data);
-		// if (philo->data->current_meals >= philo->data->total_meals)
-		// {
-		// 	print_ends(philo->data);
-		// 	sem_controller(&philo->data->s_is_ended, POST, 0, philo->data);
-		// 	sem_controller(&philo->data->s_print, WAIT, 0, philo->data);
-		// 	break ;
-		// }
-		// sem_controller(&philo->data->s_dinner_ends, POST, 0, philo->data);
 	}
-	return (NULL);
-}
-
-/* void	*philo_supervisor(void *_philo)
-{
-	t_philo	*philo;
-
-	philo = (t_philo *)_philo;
-	while (*(int *)philo->data->s_nb_philo.sem)
-		;
-	while (true)
-	{
-		sem_controller(&philo->data->s_supervisor, WAIT, 0, philo->data);
-		if (!philo_status(philo))
-		{
-			print_state(DIED, philo);
-			// philo->is_dead = true;
-			sem_controller(&philo->data->s_is_ended, POST, 0, philo->data);
-			sem_controller(&philo->data->s_supervisor, POST, 0, philo->data);
-			sem_controller(&philo->data->s_print, WAIT, 0, philo->data);
-			exit(EXIT_SUCCESS);
-		}
-		sem_controller(&philo->data->s_supervisor, POST, 0, philo->data);
-	}
-	return (NULL);
-} */
-
-void	*supervisor(void *_data)
-{
-	t_data	*data;
-	size_t	i;
-
-	data = (t_data *)_data;
-	// i = 0;
-	// precise_usleep(1e3, data);
-	// while (i < data->nb_philo)
-	// {
-	// 	sem_controller(&data->s_dinner_starts, POST, 0, data);
-	// 	++i;
-	// }
-	// sem_controller(&data->s_dinner_starts, POST, 0, data);
-	// data->start_time = get_time(MILLISECONDS, data);
-	i = 0;
-	while (i < data->nb_meals * data->nb_philo && !*(int *)data->s_is_ended.sem)
-	{
-		sem_controller(&data->s_meals_eaten, WAIT, 0, data);
-		++i;
-	}
-	if (*(int *)data->s_is_ended.sem)
-		return (NULL);
-	print_ends(data);
-	sem_controller(&data->s_print, WAIT, 0, data);
-	kill_processes(data);
 	return (NULL);
 }

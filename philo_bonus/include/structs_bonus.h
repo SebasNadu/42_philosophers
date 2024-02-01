@@ -6,7 +6,7 @@
 /*   By: sebasnadu <johnavar@student.42berlin.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/25 13:43:37 by sebasnadu         #+#    #+#             */
-/*   Updated: 2024/01/30 17:24:08 by sebasnadu        ###   ########.fr       */
+/*   Updated: 2024/02/01 13:10:07 by johnavar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ typedef struct s_philo
 {
 	size_t		id;
 	pid_t		pid;
-	bool		is_dead;
+	bool		is_ended;
 	t_sem		*left_fork;
 	t_sem		*right_fork;
 	long		last_meal_time;
@@ -104,19 +104,14 @@ struct s_data
 	long		time_to_eat;
 	long		time_to_sleep;
 	size_t		nb_meals;
+	size_t		current_meals;
+	long		start_time;
 	t_philo		*philos;
 	t_sem		forks;
-	long		start_time;
 	pthread_t	philo_supervisor_id;
-	pthread_t	supervisor_id;
 	t_sem		s_supervisor;
 	t_sem		s_print;
-	t_sem		s_dinner_starts;
-	t_sem		s_meals_eaten;
-	// size_t		total_meals;
-	size_t		current_meals;
 	t_sem		s_dinner_ends;
-	t_sem		s_is_ended;
 };
 
 #endif

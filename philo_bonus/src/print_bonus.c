@@ -6,7 +6,7 @@
 /*   By: sebasnadu <johnavar@student.42berlin.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 19:47:51 by sebasnadu         #+#    #+#             */
-/*   Updated: 2024/01/31 14:57:29 by johnavar         ###   ########.fr       */
+/*   Updated: 2024/02/01 14:16:46 by johnavar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,14 +37,15 @@ static void	print_debug(t_philo_state state, t_philo *philo, long elap)
 		printf(MAG"%-6ld "RST"["CYN"%zu"RST"] 💀💀Died💀💀\n", elap, philo->id);
 }
 
-long	print_state(t_philo_state state, t_philo *philo)
+void	print_state(t_philo_state state, t_philo *philo)
 {
 	long	elapsed;
-	long	now;
 
-	now = get_time(MILLISECONDS, philo->data);
-	elapsed = now - philo->data->start_time;
-	sem_controller(&philo->data->s_print, WAIT, 0, philo->data);
+	elapsed = get_time(MILLISECONDS, philo->data) - philo->data->start_time;
+	if (!get_is_ended(philo))
+		sem_controller(&philo->data->s_print, WAIT, 0, philo->data);
+	else
+		return ;
 	if (DEBUG_MODE)
 		print_debug(state, philo, elapsed);
 	else if (state != D_RFORK && state != D_LFORK)
@@ -61,5 +62,4 @@ long	print_state(t_philo_state state, t_philo *philo)
 			printf("%-6ld "CYN"%zu"RST" died\n", elapsed, philo->id);
 	}
 	sem_controller(&philo->data->s_print, POST, 0, philo->data);
-	return (now);
 }

@@ -6,7 +6,7 @@
 /*   By: sebasnadu <johnavar@student.42berlin.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 17:21:14 by sebasnadu         #+#    #+#             */
-/*   Updated: 2024/01/31 14:38:41 by johnavar         ###   ########.fr       */
+/*   Updated: 2024/02/01 13:08:31 by johnavar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,29 +28,20 @@ static void	dinner_entry(t_philo *philo)
 
 int	dinner(t_philo *philo)
 {
-	// sem_controller(&philo->data->s_nb_philo, POST, 0, philo->data);
-	// while (*(int *)philo->data->s_nb_philo.sem)
-	// 	;
 	dinner_entry(philo);
-	// while (*(int *)philo->data->s_nb_philo.sem)
-	while (true)
+	while (!get_is_ended(philo))
 	{
-		if (!philo_eat(philo))
-			return (1);
-		if (philo->data->nb_meals == philo->data->current_meals)
+		philo_eat(philo);
+		if (philo->data->nb_meals == philo->data->current_meals
+			&& !get_is_ended(philo))
 		{
-			sem_controller(&philo->data->s_dinner_ends, WAIT, 0, philo->data);
-			philo->is_dead = true;
-			sem_controller(&philo->data->s_dinner_ends, POST, 0, philo->data);
+			set_is_ended(true, philo);
 			return (0);
 		}
-		if (!philo_sleep(philo))
-			return (1);
-		/*if (philo->is_dead == true)*/
-			/*return ;*/
-		if (!philo_think(philo, false))
-			return (1);
+		philo_sleep(philo);
+		philo_think(philo, false);
 	}
+	return (1);
 }
 
 int	alone_dinner(t_philo *philo)
